@@ -9,7 +9,11 @@ const Input = props => {
 
     return (
         <div className={cls.join(' ')}>
-            <input type="text"/>
+            <input
+                type="text"
+                value={props.value}
+                onChange={props.onChange}
+            />
         </div>
 
     )
