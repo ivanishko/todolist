@@ -20,9 +20,38 @@
 
 .App li {
   list-style: none;
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid #7a7777;
+  min-height: 30px;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  padding: 5px;
+  padding-left: 10px;
+
+}
+.App .task {
+  flex-grow: 1;
+}
+.App .decoration {
+  text-decoration: line-through;
+}
+.App .btn {
+  padding: 5px;
+  margin: 5px;
+
+}
+
+.App .btn.delete {
+  color: red;
+}
+
+.App .btn.check {
+  color: darkgreen;
 }
 
 .App-tasklist {
   text-align: left;
   padding: 50px;
+  max-width: 300px;
 }
