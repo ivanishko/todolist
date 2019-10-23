@@ -1,19 +1,18 @@
 import React from 'react';
 import './Select.css'
 
-const Select = props => {
-
+const Select = props =>
     {
         return (
             <div className='Select'>
                 <label>{props.label}</label>
                 <select
                     onChange={props.onChange}
+                    defaultValue={props.value}
                 >
                     {props.options.map((option, index) => {
                             return (
                                 <option
-                                    selected={option.key === props.value}
                                     value={option.key}
                                     key={option.key}
                                 >
@@ -26,8 +25,7 @@ const Select = props => {
             </div>
 
         );
-    }
-}
+    };
 
 
 export default Select;

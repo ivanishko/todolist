@@ -42,7 +42,10 @@ class App extends Component{
                         return el
                     }
                 )
-            })
+            }),
+            () => {
+                localStorage.setItem('taskList', JSON.stringify(this.state.taskList))
+            }
         )
     };
 
@@ -51,7 +54,10 @@ class App extends Component{
         this.setState(
             prevState => ({
                 taskList: prevState.taskList.filter(el => el.id !== id)
-            })
+            }),
+            () => {
+                localStorage.setItem('taskList', JSON.stringify(this.state.taskList))
+            }
         )
     };
 
@@ -67,14 +73,12 @@ class App extends Component{
     };
 
     getDoneTasklist = () => {
-
         const taskList = this.state.taskList.filter(item => item.done)
         return this.getAllTasklist(taskList)
     }
 
 
     getNewTasklist = () => {
-
         const taskList = this.state.taskList.filter(item => !item.done)
         return this.getAllTasklist(taskList)
     }
@@ -111,14 +115,32 @@ class App extends Component{
                      taskList: [...prevState.taskList, taskItem],
                      task: ''
                  }
+             },
+             () => {
+                 localStorage.setItem('taskList', JSON.stringify(this.state.taskList))
              }
         )
 
 
+
     };
 
-    render() {
 
+
+    componentDidMount() {
+        console.log('comoponentDidMounth')
+        const taskList = JSON.parse(localStorage.getItem('taskList'))
+        console.log('taskList ', taskList)
+        this.setState({
+            taskList
+        })
+    }
+
+
+
+
+    render() {
+        console.log('render')
         return (
             <div className="App">
                 <header className="App-header">
@@ -146,13 +168,15 @@ class App extends Component{
                             {this.state.taskMode === 'all'  && this.getAllTasklist(this.state.taskList)}
                             {this.state.taskMode === 'new'  && this.getNewTasklist()}
                             {this.state.taskMode === 'done' && this.getDoneTasklist()}
-
                         </ul>
+
                     </div>
                 </section>
 
             </div>
         );
+
+
     }
     }
 export default App;

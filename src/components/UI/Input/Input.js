@@ -13,6 +13,9 @@ const Input = props => {
                 type="text"
                 value={props.value}
                 onChange={props.onChange}
+                autoFocus={true}
+
+
             />
         </div>
 
