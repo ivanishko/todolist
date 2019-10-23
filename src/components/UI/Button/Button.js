@@ -7,13 +7,16 @@ const Button = props => {
             [props.type]
         ]
 
+    const buttonText = 'Button'
+
         return (
                 <button
                     onClick={props.onClick}
                     className={cls.join(' ')}
                     disabled={props.disabled}
+
                 >
-                    Add task to list
+                    {props.buttonText}
                 </button>
         );
     }

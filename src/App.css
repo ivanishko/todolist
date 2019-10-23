@@ -55,3 +55,14 @@
   padding: 50px;
   max-width: 300px;
 }
+
+.App-status {
+   display: block;
+
+ }
+
+.App-status li{
+   list-style: none;
+  border: 0;
+  display: inline-block;
+}
