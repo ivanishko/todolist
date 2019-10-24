@@ -7,7 +7,6 @@ const Button = props => {
             [props.type]
         ]
 
-    const buttonText = 'Button'
 
         return (
                 <button

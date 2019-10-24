@@ -2,20 +2,40 @@
   text-align: center;
 }
 
+.App section {
+  display: flex;
+}
+
 
 .App-header {
   background-color: #7a7777;
-  min-height: 40vh;
+  min-height: 10vh;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   font-size: calc(10px + 2vmin);
   color: white;
 }
+.App-header button {
+  background: #b0ebff;
+  color: #060606;
+}
+.deskItem {
+  min-width: 300px;
+  max-width: 400px;
+  padding: 20px;
+}
 
+.deskItem h2 {
+  text-align: center;
+}
 .App-link {
   color: #09d3ac;
+}
+
+.App ul {
+  margin: 0;
+  padding: 0;
 }
 
 .App li {

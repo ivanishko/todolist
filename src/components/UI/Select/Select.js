@@ -3,7 +3,7 @@ import './Select.css'
 
 const Select = props =>
     {
-        console.log(props.value)
+        //console.log(props.value)
         return (
             <div className='Select'>
                 <label>{props.label}</label>

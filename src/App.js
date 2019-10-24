@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, {Component} from 'react';
 import './App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -19,7 +20,8 @@ const options = [
     {
         key: 'newTask',
         value: 'Новые'
-    }
+    },
+
 ]
 
 class App extends Component{
@@ -29,8 +31,11 @@ class App extends Component{
         taskMode: 'all',
     };
 
+    addNewDesk = () => {
+        return true
+    }
+
     checkTask = (id) => () => {
-        //console.log(this.state);
         this.setState(
             prevState => ({
                 taskList: prevState.taskList.map(el => {
@@ -60,7 +65,7 @@ class App extends Component{
     };
 
     getAllTaskList = (taskList) => {
-        console.log('taskList ',taskList)
+        //console.log('taskList ',taskList)
         return taskList.map((task,index) => (
                 <li key={index}>
                     <span className={`task ${task.done && 'decoration'}`}>{index + 1}. {task.task}</span>
@@ -77,12 +82,9 @@ class App extends Component{
     };
 
     getTaskListLength = (status) => {
-        // switch (status) {
-        //
-        //
-        // }
+        console.log(this.state)
         const taskList = this.state.taskList.filter(item => item.done === status);
-        console.log('getTaskListLength ', taskList);
+        //console.log('getTaskListLength ', taskList);
         return taskList.length;
     };
 
@@ -112,7 +114,7 @@ class App extends Component{
                 localStorage.setItem('taskMode', this.state.taskMode)
             }
             )
-        console.log(this.state);
+       //console.log(this.state);
     };
 
      createTask = () => {
@@ -137,11 +139,11 @@ class App extends Component{
     };
 
     componentDidMount() {
-        console.log('componentDidMounth')
+        //console.log('componentDidMounth')
         const taskList = JSON.parse(localStorage.getItem('taskList') ) || [];
         const taskMode = localStorage.getItem('taskMode') || 'all';
         //console.log('taskList ', taskList)
-        console.log('taskMode ', taskMode)
+       // console.log('taskMode ', taskMode)
         this.setState({
             taskList,
             taskMode
@@ -149,40 +151,53 @@ class App extends Component{
     };
 
     deleteAllTask = () => {
-        this.setState(
-            {
-                task: '',
-                taskList: [],
-                taskMode: 'all',
-            }
-        )
-    }
+        const isDeleteConfirm = confirm("Delete all?");
+        if (isDeleteConfirm) {
+            this.setState(
+                {
+                    task: '',
+                    taskList: [],
+                },
+                () => localStorage.setItem('taskList', JSON.stringify(this.state.taskList))
+            )
+        }
+
+    };
 
     render() {
 
         return (
             <div className="App">
                 <header className="App-header">
-                    <Input
-                        label="Sort by"
-                        onChange={this.onChangeTaskInput}
-                        value={this.state.task}
-                    />
-                    <hr/>
                     <Button
-                        onClick={this.createTask}
-                        disabled={!this.state.task}
-                        buttonText='Add task'
-                        />
-                    <hr/>
-                    <Button
-                        onClick={this.deleteAllTask}
-                        buttonText='Delete All'
-                        disabled={this.state.taskList.length === 0}
-                    />
+                        onClick={this.addNewDesk}
+                        buttonText='Add Desk'
+                    ></Button>
                 </header>
                 <section>
+                    <div className="deskItem">
+                        <h2>Desk 1</h2>
+                        <Input
+                            label="Sort by"
+                            onChange={this.onChangeTaskInput}
+                            value={this.state.task}
+                        />
+                        <hr/>
+                        <Button
+                            onClick={this.createTask}
+                            disabled={!this.state.task}
+                            buttonText='Add task'
+                        />
+
+                        <Button
+                            onClick={this.deleteAllTask}
+                            buttonText='Delete All'
+                            disabled={this.state.taskList.length === 0}
+                        />
+
+
                     <div className="App-status">
+
                         <ul>
                             <li>Всего: {this.state.taskList.length}</li>
                             <li>Активных:{this.getTaskListLength(false)}</li>
@@ -206,6 +221,10 @@ class App extends Component{
                             {this.state.taskMode === 'done' && this.getDoneTaskList()}
                         </ul>
 
+                    </div>
+                    </div>
+                    <div className="deskItem">
+                        <h2>Desk 2</h2>
                     </div>
                 </section>
 
