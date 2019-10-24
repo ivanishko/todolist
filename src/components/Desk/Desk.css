@@ -1,0 +1,67 @@
+.deskItem {
+    min-width: 300px;
+    max-width: 400px;
+    padding: 20px;
+    margin: 10px;
+}
+
+.deskItem h2 {
+    text-align: center;
+}
+.Desk-link {
+    color: #09d3ac;
+}
+
+.Desk ul {
+    margin: 0;
+    padding: 0;
+}
+
+.Desk li {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #7a7777;
+    min-height: 30px;
+    border-radius: 5px;
+    margin: 5px;
+    padding-left: 10px;
+
+}
+.Desk .task {
+    flex-grow: 1;
+    text-align: left;
+}
+.Desk .decoration {
+    text-decoration: line-through;
+}
+.Desk .btn {
+    padding: 5px;
+    margin: 5px;
+
+}
+
+.Desk .btn.delete {
+    color: red;
+}
+
+.Desk .btn.check {
+    color: darkgreen;
+}
+
+.Desk-tasklist {
+    text-align: left;
+    padding: 50px;
+    max-width: 300px;
+}
+
+.Desk-status {
+    display: block;
+
+}
+
+.Desk-status li{
+    list-style: none;
+    border: 0;
+    display: inline-block;
+}
