@@ -9,10 +9,12 @@ class App extends Component{
     state = {
         desk: '',
         deskList: [],
+        taskList: {
+
+        }
     };
 
     onChangeDeskInput = (event) => {
-        console.log(event.target.value)
         this.setState(
             {
                 desk: event.target.value
@@ -23,11 +25,11 @@ class App extends Component{
 
     createDesk = () => {
         const index = Math.round(Math.random() * 10000);
-        console.log('this.state.desk', this.state.desk);
+        //console.log('this.state.desk', this.state.desk);
         const deskItem = {
             id: index,
             desk: this.state.desk
-        }
+        };
 
         this.setState(
             (prevState) => {
@@ -38,19 +40,43 @@ class App extends Component{
             },
             () => {
                 localStorage.setItem('deskList', JSON.stringify(this.state.deskList))
+            }
+        );
+       // console.log(this.state);
+    };
+    createTask = (deskID,taskItem) => {
 
+        this.setState(
+            (prevState) => {
+                //console.log('prevState.taskList', prevState.taskList);
+                const taskList = prevState.taskList[deskID] ? [...prevState.taskList[deskID], taskItem] : [taskItem];
+                const taskListObject = {};
+                taskListObject[deskID] = taskList;
+                //console.log('taskList',taskList);
+                return {
+                    taskList: {
+                        ...prevState.taskList,
+                        ...taskListObject
+                    }
+                }
+            },
+            () => {
+                localStorage.setItem('taskList', JSON.stringify(this.state.taskList))
             }
         )
-        console.log(this.state);
-    }
+
+    };
 
     getAllDeskList = (deskList) => {
-        console.log('deskList',deskList);
+        //console.log('deskList',deskList);
         return deskList.map((desk,index) => (
 
                 <li key={index}>
                     <Desk
+                        checkTask = {this.checkTask}
+                        taskList = {this.state.taskList[desk.id]}
                         deleteDesk = {this.deleteDesk}
+                        createTask = {this.createTask}
                         title={desk.desk}
                         id={desk.id}
                     />
@@ -59,20 +85,38 @@ class App extends Component{
 
         ));
     };
+// TODO  разобраться с чеканьем задач!
+    checkTask = (deskID,taskItem) => {
+        this.setState(
+            prevState => ({
+                taskList: prevState.taskList[deskID].map(el => {
+                        if (el.deskID === deskID) {
+                            el.done = !el.done
+                        }
+                        return el
+                    }
+                )
+            }),
+            () => {
+                localStorage.setItem('taskItem', JSON.stringify(this.state.taskItem))
+            }
+        )
+    };
+
 
     componentDidMount() {
-        console.log('componentDidMounth')
+        // console.log('componentDidMounth')
         const deskList = JSON.parse(localStorage.getItem('deskList') ) || [];
         // const deskMode = localStorage.getItem('taskMode') || 'all';
         // console.log('taskList ', taskList)
-         console.log('deskList ', deskList)
+        // console.log('deskList ', deskList)
         this.setState({
             deskList
         })
      };
 
     deleteDesk = (id) => {
-        console.log('deleteDesk');
+
         this.setState(
             prevState => ({
                 deskList: prevState.deskList.filter(el => el.id !== id)
@@ -81,10 +125,10 @@ class App extends Component{
                 localStorage.setItem('deskList', JSON.stringify(this.state.deskList))
             }
         )
-    }
+    };
 
     render() {
-        console.log('render',this.state);
+       //console.log('render!!!!!!!!!!',this.state);
         return (
             <div className="App">
                 <header className="App-header">
@@ -108,8 +152,6 @@ class App extends Component{
 
             </div>
         );
-
-
     }
 }
 export default App;

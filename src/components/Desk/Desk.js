@@ -23,30 +23,33 @@ const options = [
         value: 'Новые'
     },
 
-]
+];
 
 class Desk extends Component{
     state = {
         task: '',
-        taskList: [],
+        deskId: '',
+        taskList: {
+        },
         taskMode: 'all',
     };
 
-    checkTask = (id) => () => {
-        this.setState(
-            prevState => ({
-                taskList: prevState.taskList.map(el => {
-                        if (el.id === id) {
-                            el.done = !el.done
-                        }
-                        return el
-                    }
-                )
-            }),
-            () => {
-                localStorage.setItem('taskList', JSON.stringify(this.state.taskList))
-            }
-        )
+    checkTask = (deskId,taskList) => () => {
+        this.props.checkTask(deskId,taskList)
+        // this.setState(
+        //     prevState => ({
+        //         taskList: prevState.taskList.map(el => {
+        //                 if (el.id === id) {
+        //                     el.done = !el.done
+        //                 }
+        //                 return el
+        //             }
+        //         )
+        //     }),
+        //     () => {
+        //         localStorage.setItem('taskList', JSON.stringify(this.state.taskList))
+        //     }
+        // )
     };
 
     deleteTask = (id) => () => {
@@ -62,15 +65,15 @@ class Desk extends Component{
     };
 
     getAllTaskList = (taskList) => {
-        //console.log('taskList ',taskList)
-        return taskList.map((task,index) => (
+
+        return taskList && taskList.map((task,index) => (
                 <li key={index}>
                     <span className={`task ${task.done && 'decoration'}`}>{index + 1}. {task.task}</span>
-                    <button className="btn check"><FontAwesomeIcon icon={faCheck} onClick={this.checkTask(task.id) } /></button>
-                    <button className="btn delete"><FontAwesomeIcon icon={faTrashAlt} onClick={this.deleteTask(task.id) } /></button>
+                    <button className="btn check"><FontAwesomeIcon icon={faCheck} onClick={this.checkTask(task.TaskID) } /></button>
+                    <button className="btn delete"><FontAwesomeIcon icon={faTrashAlt} onClick={this.deleteTask(task.TaskID) } /></button>
                 </li>
-            )
-        );
+                )
+        )
     };
 
     getDoneTaskList = () => {
@@ -104,8 +107,7 @@ class Desk extends Component{
         this.setState(
             {
                 taskMode:event.target.value
-            }
-            ,
+            },
             () => {
                 localStorage.setItem('taskMode', this.state.taskMode)
             }
@@ -113,26 +115,23 @@ class Desk extends Component{
         //console.log(this.state);
     };
 
-    createTask = () => {
+    createTask = (deskID) => () => {
         const index = Math.round(Math.random() * 10000)
         const taskItem = {
             id: index,
             task: this.state.task,
             done:false,
-
+            deskID
         };
 
-        this.setState(
-            (prevState) => {
-                return {
-                    taskList: [...prevState.taskList, taskItem],
-                    task: ''
-                }
-            },
-            () => {
-                localStorage.setItem('taskList', JSON.stringify(this.state.taskList))
-            }
+        this.props.createTask(deskID,taskItem);
+        this.setState( {
+            task:''
+        }
+
         )
+
+
     };
 
     componentDidMount() {
@@ -168,7 +167,6 @@ class Desk extends Component{
             <div className="deskItem">
                 <button className="btn delete delete-desk" onClick={this.deleteDesk}><FontAwesomeIcon icon={faTimes}   /></button>
 
-
                 <h3>Desk {this.props.title}</h3>
                 <Input
                     onChange={this.onChangeTaskInput}
@@ -176,7 +174,7 @@ class Desk extends Component{
                 />
                 <hr/>
                 <Button
-                    onClick={this.createTask}
+                    onClick={this.createTask(this.props.id)}
                     disabled={!this.state.task}
                     buttonText='Add task'
                 />
@@ -188,8 +186,8 @@ class Desk extends Component{
                 <div className="Desk-status">
                     <ul>
                         <li>Всего: {this.state.taskList.length}</li>
-                        <li>Активных:{this.getTaskListLength(false)}</li>
-                        <li>Выполненных:{this.getTaskListLength(true)}</li>
+                        {/*<li>Активных:{this.getTaskListLength(false)}</li>*/}
+                        {/*<li>Выполненных:{this.getTaskListLength(true)}</li>*/}
                     </ul>
                 </div>
                 <div className="Desk-taskList">
@@ -201,9 +199,9 @@ class Desk extends Component{
                     />
                     <h2>My tasks</h2>
                     <ul>
-                        {this.state.taskMode === 'all'  && this.getAllTaskList(this.state.taskList)}
-                        {this.state.taskMode === 'newTask'  && this.getNewTaskList()}
-                        {this.state.taskMode === 'done' && this.getDoneTaskList()}
+                        {this.state.taskMode === 'all'  && this.getAllTaskList(this.props.taskList)}
+                        {/*{this.state.taskMode === 'newTask'  && this.getNewTaskList()}*/}
+                        {/*{this.state.taskMode === 'done' && this.getDoneTaskList()}*/}
                     </ul>
                 </div>
             </div>
