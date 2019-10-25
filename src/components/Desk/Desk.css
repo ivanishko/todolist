@@ -1,4 +1,5 @@
 .deskItem {
+    position: relative;
     min-width: 300px;
     max-width: 400px;
     padding: 20px;
@@ -12,9 +13,11 @@
     color: #09d3ac;
 }
 
-.Desk ul {
+.Desk > ul {
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .Desk li {
@@ -38,11 +41,18 @@
 .Desk .btn {
     padding: 5px;
     margin: 5px;
+    border-radius: 3px;
 
 }
 
 .Desk .btn.delete {
     color: red;
+}
+
+.Desk .btn.delete.delete-desk {
+    position: absolute;
+    right: 0;
+    top: 0;
 }
 
 .Desk .btn.check {

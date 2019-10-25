@@ -14,8 +14,6 @@ const Input = props => {
                 value={props.value}
                 onChange={props.onChange}
 
-
-
             />
         </div>
 

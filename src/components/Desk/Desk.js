@@ -4,6 +4,7 @@ import './Desk.css'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faTrashAlt} from '@fortawesome/free-solid-svg-icons'
 import {faCheck} from '@fortawesome/free-solid-svg-icons'
+import {faTimes} from '@fortawesome/free-solid-svg-icons'
 import Input from '../UI/Input/Input';
 import Button from '../UI/Button/Button'
 import Select from "../UI/Select/Select";
@@ -118,6 +119,7 @@ class Desk extends Component{
             id: index,
             task: this.state.task,
             done:false,
+
         };
 
         this.setState(
@@ -137,7 +139,7 @@ class Desk extends Component{
         //console.log('componentDidMounth')
         const taskList = JSON.parse(localStorage.getItem('taskList') ) || [];
         const taskMode = localStorage.getItem('taskMode') || 'all';
-        //console.log('taskList ', taskList)
+        // console.log('taskList ', taskList)
         // console.log('taskMode ', taskMode)
         this.setState({
             taskList,
@@ -157,10 +159,16 @@ class Desk extends Component{
             )
         }
     };
+    deleteDesk = () => {
+    this.props.deleteDesk(this.props.id)
+    };
 
     render() {
         return(
             <div className="deskItem">
+                <button className="btn delete delete-desk" onClick={this.deleteDesk}><FontAwesomeIcon icon={faTimes}   /></button>
+
+
                 <h3>Desk {this.props.title}</h3>
                 <Input
                     onChange={this.onChangeTaskInput}
