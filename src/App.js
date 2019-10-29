@@ -5,12 +5,12 @@ import Input from './components/UI/Input/Input';
 import Button from './components/UI/Button/Button';
 import Desk from './components/Desk/Desk';
 
+
 class App extends Component{
     state = {
         desk: '',
         deskList: [],
         taskList: {
-
         }
     };
 
@@ -28,7 +28,9 @@ class App extends Component{
         //console.log('this.state.desk', this.state.desk);
         const deskItem = {
             id: index,
-            desk: this.state.desk
+            desk: this.state.desk,
+            taskMode: 'all'
+
         };
 
         this.setState(
@@ -36,6 +38,7 @@ class App extends Component{
                 return {
                     deskList: [...prevState.deskList, deskItem],
                     desk: ''
+
                 }
             },
             () => {
@@ -45,14 +48,13 @@ class App extends Component{
        // console.log(this.state);
     };
     createTask = (deskID,taskItem) => {
-
         this.setState(
             (prevState) => {
                 //console.log('prevState.taskList', prevState.taskList);
                 const taskList = prevState.taskList[deskID] ? [...prevState.taskList[deskID], taskItem] : [taskItem];
                 const taskListObject = {};
                 taskListObject[deskID] = taskList;
-                //console.log('taskList',taskList);
+                console.log('createTask  taskList',taskList);
                 return {
                     taskList: {
                         ...prevState.taskList,
@@ -64,8 +66,38 @@ class App extends Component{
                 localStorage.setItem('taskList', JSON.stringify(this.state.taskList))
             }
         )
+    };
+
+    deleteTask = (deskID,taskID) => {
+        console.log('deskID,taskID', deskID,taskID)
+        this.setState(
+            prevState => ({
+                taskList: {
+                    ...prevState.taskList,
+                    [deskID]:prevState.taskList[deskID].filter(el => el.id !== taskID)
+                }
+
+            })
+            ,
+            () => {
+                localStorage.setItem('taskList', JSON.stringify(this.state.taskList))
+            }
+        )
 
     };
+
+    deleteAllTask = (deskID) => {
+        this.setState(
+            prevState => ({
+                taskList: {
+                    ...prevState.taskList,
+                    [deskID]:prevState.taskList[deskID] = []
+                }
+
+            }),
+            () => localStorage.setItem('taskList', JSON.stringify(this.state.taskList))
+        )
+    }
 
     getAllDeskList = (deskList) => {
         //console.log('deskList',deskList);
@@ -77,6 +109,8 @@ class App extends Component{
                         taskList = {this.state.taskList[desk.id]}
                         deleteDesk = {this.deleteDesk}
                         createTask = {this.createTask}
+                        deleteTask = {this.deleteTask}
+                        deleteAllTask = {this.deleteAllTask}
                         title={desk.desk}
                         id={desk.id}
                     />
@@ -86,32 +120,40 @@ class App extends Component{
         ));
     };
 // TODO  разобраться с чеканьем задач!
-    checkTask = (deskID,taskItem) => {
+    checkTask = (deskID,taskID) => {
         this.setState(
             prevState => ({
-                taskList: prevState.taskList[deskID].map(el => {
-                        if (el.deskID === deskID) {
+                taskList: {
+                    ...prevState.taskList,
+                    [deskID]:prevState.taskList[deskID].map(el => {
+                        if (el.id === taskID) {
                             el.done = !el.done
                         }
                         return el
-                    }
-                )
-            }),
+                    })
+                }
+            })
+        ,
             () => {
-                localStorage.setItem('taskItem', JSON.stringify(this.state.taskItem))
+                localStorage.setItem('taskList', JSON.stringify(this.state.taskList))
             }
         )
+
     };
+
+
 
 
     componentDidMount() {
         // console.log('componentDidMounth')
         const deskList = JSON.parse(localStorage.getItem('deskList') ) || [];
+        const taskList = JSON.parse(localStorage.getItem('taskList') ) || [];
         // const deskMode = localStorage.getItem('taskMode') || 'all';
         // console.log('taskList ', taskList)
         // console.log('deskList ', deskList)
         this.setState({
-            deskList
+            deskList,
+            taskList
         })
      };
 
@@ -126,6 +168,8 @@ class App extends Component{
             }
         )
     };
+
+
 
     render() {
        //console.log('render!!!!!!!!!!',this.state);
@@ -143,6 +187,7 @@ class App extends Component{
                         disabled={!this.state.desk}
                     />
                 </header>
+
                 <section className="Desk">
                     <ul>
                         {this.getAllDeskList(this.state.deskList)}

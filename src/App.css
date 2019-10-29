@@ -20,3 +20,8 @@
   background: #b0ebff;
   color: #060606;
 }
+
+ul {
+  margin: 0;
+  padding: 0;
+}

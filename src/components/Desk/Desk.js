@@ -7,7 +7,8 @@ import {faCheck} from '@fortawesome/free-solid-svg-icons'
 import {faTimes} from '@fortawesome/free-solid-svg-icons'
 import Input from '../UI/Input/Input';
 import Button from '../UI/Button/Button'
-import Select from "../UI/Select/Select";
+import Select from '../UI/Select/Select';
+
 
 const options = [
     {
@@ -22,46 +23,23 @@ const options = [
         key: 'newTask',
         value: 'Новые'
     },
-
 ];
 
 class Desk extends Component{
     state = {
         task: '',
-        deskId: '',
+        deskID: '',
         taskList: {
         },
         taskMode: 'all',
     };
 
-    checkTask = (deskId,taskList) => () => {
-        this.props.checkTask(deskId,taskList)
-        // this.setState(
-        //     prevState => ({
-        //         taskList: prevState.taskList.map(el => {
-        //                 if (el.id === id) {
-        //                     el.done = !el.done
-        //                 }
-        //                 return el
-        //             }
-        //         )
-        //     }),
-        //     () => {
-        //         localStorage.setItem('taskList', JSON.stringify(this.state.taskList))
-        //     }
-        // )
+    checkTask = (taskID) => () => {
+        this.props.checkTask(this.props.id,taskID)
     };
 
-    deleteTask = (id) => () => {
-        //console.log(id);
-        this.setState(
-            prevState => ({
-                taskList: prevState.taskList.filter(el => el.id !== id)
-            }),
-            () => {
-                localStorage.setItem('taskList', JSON.stringify(this.state.taskList))
-            }
-        )
+    deleteTask = (taskID) => () => {
+        this.props.deleteTask(this.props.id,taskID)
     };
 
     getAllTaskList = (taskList) => {
@@ -69,28 +47,48 @@ class Desk extends Component{
         return taskList && taskList.map((task,index) => (
                 <li key={index}>
                     <span className={`task ${task.done && 'decoration'}`}>{index + 1}. {task.task}</span>
-                    <button className="btn check"><FontAwesomeIcon icon={faCheck} onClick={this.checkTask(task.TaskID) } /></button>
-                    <button className="btn delete"><FontAwesomeIcon icon={faTrashAlt} onClick={this.deleteTask(task.TaskID) } /></button>
+                    <button className="btn check"><FontAwesomeIcon icon={faCheck} onClick={this.checkTask(task.id) } /></button>
+                    <button className="btn delete"><FontAwesomeIcon icon={faTrashAlt} onClick={this.deleteTask(task.id) } /></button>
                 </li>
                 )
         )
     };
 
     getDoneTaskList = () => {
-        const taskList = this.state.taskList.filter(item => item.done);
-        return this.getAllTaskList(taskList)
-    };
-
-    getTaskListLength = (status) => {
-        //console.log(this.state)
-        const taskList = this.state.taskList.filter(item => item.done === status);
-        //console.log('getTaskListLength ', taskList);
-        return taskList.length;
+        const taskList = this.state.taskList[this.props.id] ? [...this.state.taskList[this.props.id]] : [];
+        const task = taskList.filter(item => item.done);
+        console.log('getDoneTaskList ',task);
+        return this.getAllTaskList(task)
     };
 
     getNewTaskList = () => {
-        const taskList = this.state.taskList.filter(item => !item.done);
-        return this.getAllTaskList(taskList)
+        const taskList = this.state.taskList[this.props.id] ? [...this.state.taskList[this.props.id]] : [];
+        const task = taskList.filter(item => !item.done);
+
+        console.log('getNewTaskList ',task);
+        return this.getAllTaskList(task)
+    };
+
+
+    onChangeTaskSelect = (event) => {
+        this.setState(
+            {
+                taskMode:event.target.value
+            },
+            () => {
+                localStorage.setItem('taskMode', this.state.taskMode)
+            }
+        )
+    };
+
+
+
+
+    getTaskListLength = (status) => {
+        console.log('taskList ', this.props.taskList);
+            const task = this.props.taskList ? this.props.taskList.filter(item => item.done === status) : [];
+        console.log('task',task);
+            return task.length;
     };
 
     onChangeTaskInput = (event) => {
@@ -102,18 +100,6 @@ class Desk extends Component{
 
     };
 
-    onChangeTaskSelect = (event) => {
-        //console.log(event.target.value);
-        this.setState(
-            {
-                taskMode:event.target.value
-            },
-            () => {
-                localStorage.setItem('taskMode', this.state.taskMode)
-            }
-        )
-        //console.log(this.state);
-    };
 
     createTask = (deskID) => () => {
         const index = Math.round(Math.random() * 10000)
@@ -123,23 +109,22 @@ class Desk extends Component{
             done:false,
             deskID
         };
+        // /??????/
+
+
+        const taskList = this.state.taskList[deskID] ? [...this.state.taskList[deskID]] : [];
 
         this.props.createTask(deskID,taskItem);
         this.setState( {
             task:''
+
         }
-
         )
-
-
     };
 
     componentDidMount() {
-        //console.log('componentDidMounth')
         const taskList = JSON.parse(localStorage.getItem('taskList') ) || [];
         const taskMode = localStorage.getItem('taskMode') || 'all';
-        // console.log('taskList ', taskList)
-        // console.log('taskMode ', taskMode)
         this.setState({
             taskList,
             taskMode
@@ -148,18 +133,14 @@ class Desk extends Component{
 
     deleteAllTask = () => {
         const isDeleteConfirm = confirm("Delete all?");
+
         if (isDeleteConfirm) {
-            this.setState(
-                {
-                    task: '',
-                    taskList: [],
-                },
-                () => localStorage.setItem('taskList', JSON.stringify(this.state.taskList))
-            )
+            this.props.deleteAllTask(this.props.id)
         }
     };
+
     deleteDesk = () => {
-    this.props.deleteDesk(this.props.id)
+        this.props.deleteDesk(this.props.id)
     };
 
     render() {
@@ -167,7 +148,7 @@ class Desk extends Component{
             <div className="deskItem">
                 <button className="btn delete delete-desk" onClick={this.deleteDesk}><FontAwesomeIcon icon={faTimes}   /></button>
 
-                <h3>Desk {this.props.title}</h3>
+                <h3>Desk {this.props.title} (ID: {this.props.id})</h3>
                 <Input
                     onChange={this.onChangeTaskInput}
                     value={this.state.task}
@@ -181,27 +162,28 @@ class Desk extends Component{
                 <Button
                     onClick={this.deleteAllTask}
                     buttonText='Delete All'
-                    disabled={this.state.taskList.length === 0}
+                    disabled={this.props.taskList ? this.props.taskList .length === 0 : false}
                 />
                 <div className="Desk-status">
-                    <ul>
-                        <li>Всего: {this.state.taskList.length}</li>
-                        {/*<li>Активных:{this.getTaskListLength(false)}</li>*/}
-                        {/*<li>Выполненных:{this.getTaskListLength(true)}</li>*/}
-                    </ul>
-                </div>
-                <div className="Desk-taskList">
                     <Select
                         options={options}
                         label="Sort by"
                         value={this.state.taskMode}
                         onChange={this.onChangeTaskSelect}
                     />
+                    <ul>
+                        <li>Всего: {this.props.taskList ? this.props.taskList .length === 0 : '0'}</li>
+                        <li>Активных:{this.getTaskListLength(false)}</li>
+                        <li>Выполненных:{this.getTaskListLength(true)}</li>
+                    </ul>
+                </div>
+                <div className="Desk-taskList">
+
                     <h2>My tasks</h2>
                     <ul>
                         {this.state.taskMode === 'all'  && this.getAllTaskList(this.props.taskList)}
-                        {/*{this.state.taskMode === 'newTask'  && this.getNewTaskList()}*/}
-                        {/*{this.state.taskMode === 'done' && this.getDoneTaskList()}*/}
+                        {this.state.taskMode === 'newTask'  && this.getNewTaskList()}
+                        {this.state.taskMode === 'done' && this.getDoneTaskList()}
                     </ul>
                 </div>
             </div>

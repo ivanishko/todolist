@@ -29,8 +29,9 @@
     border-radius: 5px;
     margin: 5px;
     padding-left: 10px;
-
 }
+
+
 .Desk .task {
     flex-grow: 1;
     text-align: left;
@@ -74,4 +75,8 @@
     list-style: none;
     border: 0;
     display: inline-block;
+}
+
+.Desk .Select {
+    padding: 10px;
 }
