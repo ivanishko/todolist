@@ -25,7 +25,6 @@ class App extends Component{
 
     createDesk = () => {
         const index = Math.round(Math.random() * 10000);
-        //console.log('this.state.desk', this.state.desk);
         const deskItem = {
             id: index,
             desk: this.state.desk,
@@ -45,16 +44,13 @@ class App extends Component{
                 localStorage.setItem('deskList', JSON.stringify(this.state.deskList))
             }
         );
-       // console.log(this.state);
     };
     createTask = (deskID,taskItem) => {
         this.setState(
             (prevState) => {
-                //console.log('prevState.taskList', prevState.taskList);
                 const taskList = prevState.taskList[deskID] ? [...prevState.taskList[deskID], taskItem] : [taskItem];
                 const taskListObject = {};
                 taskListObject[deskID] = taskList;
-                console.log('createTask  taskList',taskList);
                 return {
                     taskList: {
                         ...prevState.taskList,
@@ -69,7 +65,6 @@ class App extends Component{
     };
 
     deleteTask = (deskID,taskID) => {
-        console.log('deskID,taskID', deskID,taskID)
         this.setState(
             prevState => ({
                 taskList: {
@@ -100,9 +95,7 @@ class App extends Component{
     }
 
     getAllDeskList = (deskList) => {
-        //console.log('deskList',deskList);
         return deskList.map((desk,index) => (
-
                 <li key={index}>
                     <Desk
                         checkTask = {this.checkTask}
@@ -113,13 +106,12 @@ class App extends Component{
                         deleteAllTask = {this.deleteAllTask}
                         title={desk.desk}
                         id={desk.id}
+                        onChangeTaskSelectInput={this.onChangeTaskSelectInput}
+                        taskMode = {desk.taskMode}
                     />
                 </li>
-
-
         ));
     };
-// TODO  разобраться с чеканьем задач!
     checkTask = (deskID,taskID) => {
         this.setState(
             prevState => ({
@@ -132,8 +124,7 @@ class App extends Component{
                         return el
                     })
                 }
-            })
-        ,
+            }),
             () => {
                 localStorage.setItem('taskList', JSON.stringify(this.state.taskList))
             }
@@ -141,16 +132,9 @@ class App extends Component{
 
     };
 
-
-
-
-    componentDidMount() {
-        // console.log('componentDidMounth')
+    componentDidMount(){
         const deskList = JSON.parse(localStorage.getItem('deskList') ) || [];
         const taskList = JSON.parse(localStorage.getItem('taskList') ) || [];
-        // const deskMode = localStorage.getItem('taskMode') || 'all';
-        // console.log('taskList ', taskList)
-        // console.log('deskList ', deskList)
         this.setState({
             deskList,
             taskList
@@ -169,10 +153,23 @@ class App extends Component{
         )
     };
 
-
+    onChangeTaskSelectInput = (id,event) => {
+        this.setState(
+            prevState => ({
+                deskList: prevState.deskList.map(el => {
+                    if (el.id === id) {
+                        el.taskMode = event
+                    }
+                    return el
+                }),
+            }),
+            () => {
+                localStorage.setItem('deskList', JSON.stringify(this.state.deskList));
+            }
+        )
+    };
 
     render() {
-       //console.log('render!!!!!!!!!!',this.state);
         return (
             <div className="App">
                 <header className="App-header">

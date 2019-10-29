@@ -31,7 +31,7 @@ class Desk extends Component{
         deskID: '',
         taskList: {
         },
-        taskMode: 'all',
+        taskMode: '',
     };
 
     checkTask = (taskID) => () => {
@@ -55,39 +55,26 @@ class Desk extends Component{
     };
 
     getDoneTaskList = () => {
-        const taskList = this.state.taskList[this.props.id] ? [...this.state.taskList[this.props.id]] : [];
-        const task = taskList.filter(item => item.done);
-        console.log('getDoneTaskList ',task);
+        const task = this.props.taskList.filter(item => item.done);
         return this.getAllTaskList(task)
     };
 
     getNewTaskList = () => {
-        const taskList = this.state.taskList[this.props.id] ? [...this.state.taskList[this.props.id]] : [];
-        const task = taskList.filter(item => !item.done);
-
-        console.log('getNewTaskList ',task);
+        const task = this.props.taskList.filter(item => !item.done);
         return this.getAllTaskList(task)
     };
-
 
     onChangeTaskSelect = (event) => {
         this.setState(
             {
                 taskMode:event.target.value
             },
-            () => {
-                localStorage.setItem('taskMode', this.state.taskMode)
-            }
-        )
-    };
-
-
+        this.props.onChangeTaskSelectInput(this.props.id,event.target.value)
+        )};
 
 
     getTaskListLength = (status) => {
-        console.log('taskList ', this.props.taskList);
             const task = this.props.taskList ? this.props.taskList.filter(item => item.done === status) : [];
-        console.log('task',task);
             return task.length;
     };
 
@@ -109,15 +96,10 @@ class Desk extends Component{
             done:false,
             deskID
         };
-        // /??????/
-
-
-        const taskList = this.state.taskList[deskID] ? [...this.state.taskList[deskID]] : [];
 
         this.props.createTask(deskID,taskItem);
         this.setState( {
             task:''
-
         }
         )
     };
@@ -147,7 +129,6 @@ class Desk extends Component{
         return(
             <div className="deskItem">
                 <button className="btn delete delete-desk" onClick={this.deleteDesk}><FontAwesomeIcon icon={faTimes}   /></button>
-
                 <h3>Desk {this.props.title} (ID: {this.props.id})</h3>
                 <Input
                     onChange={this.onChangeTaskInput}
@@ -162,17 +143,17 @@ class Desk extends Component{
                 <Button
                     onClick={this.deleteAllTask}
                     buttonText='Delete All'
-                    disabled={this.props.taskList ? this.props.taskList .length === 0 : false}
+                    disabled={this.props.taskList && !this.props.taskList.length}
                 />
                 <div className="Desk-status">
                     <Select
                         options={options}
                         label="Sort by"
-                        value={this.state.taskMode}
+                        value={this.props.taskMode}
                         onChange={this.onChangeTaskSelect}
                     />
                     <ul>
-                        <li>Всего: {this.props.taskList ? this.props.taskList .length === 0 : '0'}</li>
+                        <li>Всего: {this.props.taskList ? this.props.taskList.length : '0'}</li>
                         <li>Активных:{this.getTaskListLength(false)}</li>
                         <li>Выполненных:{this.getTaskListLength(true)}</li>
                     </ul>
@@ -181,9 +162,9 @@ class Desk extends Component{
 
                     <h2>My tasks</h2>
                     <ul>
-                        {this.state.taskMode === 'all'  && this.getAllTaskList(this.props.taskList)}
-                        {this.state.taskMode === 'newTask'  && this.getNewTaskList()}
-                        {this.state.taskMode === 'done' && this.getDoneTaskList()}
+                        {this.props.taskMode === 'all'  && this.getAllTaskList(this.props.taskList)}
+                        {this.props.taskMode === 'newTask'  && this.getNewTaskList()}
+                        {this.props.taskMode === 'done' && this.getDoneTaskList()}
                     </ul>
                 </div>
             </div>
