@@ -143,7 +143,7 @@ class Desk extends Component{
                 <Button
                     onClick={this.deleteAllTask}
                     buttonText='Delete All'
-                    disabled={this.props.taskList && !this.props.taskList.length}
+                    disabled={!this.props.taskList || !this.props.taskList.length}
                 />
                 <div className="Desk-status">
                     <Select
