@@ -1,9 +1,32 @@
 /* eslint-disable */
+
 import React, {Component} from 'react';
 import './App.css';
+import {BrowserRouter , Route, Switch} from 'react-router-dom';
 import Input from './components/UI/Input/Input';
 import Button from './components/UI/Button/Button';
 import Desk from './components/Desk/Desk';
+import Desklist from "./components/Desklist/Desklist";
+import DeskDetail from "./components/DeskDetail/DeskDetail";
+import Select from "./components/UI/Select/Select";
+// import NavLink from "react-router-dom/modules/NavLink";
+
+const options = [
+    {
+        key: 'all',
+        value: 'Все'
+    },
+    {
+        key: 'done',
+        value: 'Выполенные'
+    },
+    {
+        key: 'newTask',
+        value: 'Новые'
+    },
+];
+
+
 
 
 class App extends Component{
@@ -45,6 +68,27 @@ class App extends Component{
             }
         );
     };
+
+    getAllDeskList = (deskList) => {
+        return deskList.map((desk,index) => (
+            <li key={index}>
+                <Desk
+                    checkTask = {this.checkTask}
+                    taskList = {this.state.taskList[desk.id]}
+                    deleteDesk = {this.deleteDesk}
+                    createTask = {this.createTask}
+                    deleteTask = {this.deleteTask}
+                    deleteAllTask = {this.deleteAllTask}
+                    title={desk.desk}
+                    id={desk.id}
+                    onChangeTaskSelectInput={this.onChangeTaskSelectInput}
+                    taskMode = {desk.taskMode}
+                    options={options}
+                />
+            </li>
+        ));
+    };
+
     createTask = (deskID,taskItem) => {
         this.setState(
             (prevState) => {
@@ -71,14 +115,12 @@ class App extends Component{
                     ...prevState.taskList,
                     [deskID]:prevState.taskList[deskID].filter(el => el.id !== taskID)
                 }
-
             })
             ,
             () => {
                 localStorage.setItem('taskList', JSON.stringify(this.state.taskList))
             }
         )
-
     };
 
     deleteAllTask = (deskID) => {
@@ -92,26 +134,9 @@ class App extends Component{
             }),
             () => localStorage.setItem('taskList', JSON.stringify(this.state.taskList))
         )
-    }
-
-    getAllDeskList = (deskList) => {
-        return deskList.map((desk,index) => (
-                <li key={index}>
-                    <Desk
-                        checkTask = {this.checkTask}
-                        taskList = {this.state.taskList[desk.id]}
-                        deleteDesk = {this.deleteDesk}
-                        createTask = {this.createTask}
-                        deleteTask = {this.deleteTask}
-                        deleteAllTask = {this.deleteAllTask}
-                        title={desk.desk}
-                        id={desk.id}
-                        onChangeTaskSelectInput={this.onChangeTaskSelectInput}
-                        taskMode = {desk.taskMode}
-                    />
-                </li>
-        ));
     };
+
+
     checkTask = (deskID,taskID) => {
         this.setState(
             prevState => ({
@@ -139,10 +164,9 @@ class App extends Component{
             deskList,
             taskList
         })
-     };
+    };
 
     deleteDesk = (id) => {
-
         this.setState(
             prevState => ({
                 deskList: prevState.deskList.filter(el => el.id !== id)
@@ -170,28 +194,29 @@ class App extends Component{
     };
 
     render() {
+    //console.log('this.props',this.props.match.deskID);
+
         return (
             <div className="App">
-                <header className="App-header">
-                    <Input
-                        onChange={this.onChangeDeskInput}
-                        value={this.state.desk}
-                    />
+            <BrowserRouter>
+                    <Switch>
 
-                    <Button
-                        onClick={this.createDesk}
-                        buttonText='Add Desk'
-                        disabled={!this.state.desk}
-                    />
-                </header>
+                        <Route exact path="/desk/:deskID"
+                              render={() => (<DeskDetail
+                                      options={options}
+                                      id={this.state.deskList.id}
+                                  />)} />
+                        <Route exact path="/" render={() => ( <Desklist
+                            deskList={this.state.deskList}
+                            getAllDeskList = {this.getAllDeskList}
+                            onChangeDeskInput = {this.onChangeDeskInput}
+                            createDesk = {this.createDesk}
+                            desk={this.state.desk}
 
-                <section className="Desk">
-                    <ul>
-                        {this.getAllDeskList(this.state.deskList)}
-                    </ul>
+                        />)} />
 
-                </section>
-
+                    </Switch>
+            </BrowserRouter>
             </div>
         );
     }

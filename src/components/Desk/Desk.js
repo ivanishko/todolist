@@ -8,22 +8,11 @@ import {faTimes} from '@fortawesome/free-solid-svg-icons'
 import Input from '../UI/Input/Input';
 import Button from '../UI/Button/Button'
 import Select from '../UI/Select/Select';
+import {Link} from "react-router-dom";
+import { BrowserRouter as Router } from 'react-router-dom'
+import {withRouter} from 'react-router-dom'
 
 
-const options = [
-    {
-        key: 'all',
-        value: 'Все'
-    },
-    {
-        key: 'done',
-        value: 'Выполенные'
-    },
-    {
-        key: 'newTask',
-        value: 'Новые'
-    },
-];
 
 class Desk extends Component{
     state = {
@@ -126,50 +115,53 @@ class Desk extends Component{
     };
 
     render() {
+       // console.log(props);
         return(
-            <div className="deskItem">
-                <button className="btn delete delete-desk" onClick={this.deleteDesk}><FontAwesomeIcon icon={faTimes}   /></button>
-                <h3>Desk {this.props.title} (ID: {this.props.id})</h3>
-                <Input
-                    onChange={this.onChangeTaskInput}
-                    value={this.state.task}
-                />
-                <hr/>
-                <Button
-                    onClick={this.createTask(this.props.id)}
-                    disabled={!this.state.task}
-                    buttonText='Add task'
-                />
-                <Button
-                    onClick={this.deleteAllTask}
-                    buttonText='Delete All'
-                    disabled={!this.props.taskList || !this.props.taskList.length}
-                />
-                <div className="Desk-status">
-                    <Select
-                        options={options}
-                        label="Sort by"
-                        value={this.props.taskMode}
-                        onChange={this.onChangeTaskSelect}
-                    />
-                    <ul>
-                        <li>Всего: {this.props.taskList ? this.props.taskList.length : '0'}</li>
-                        <li>Активных:{this.getTaskListLength(false)}</li>
-                        <li>Выполненных:{this.getTaskListLength(true)}</li>
-                    </ul>
-                </div>
-                <div className="Desk-taskList">
 
-                    <h2>My tasks</h2>
-                    <ul>
-                        {this.props.taskMode === 'all'  && this.getAllTaskList(this.props.taskList)}
-                        {this.props.taskMode === 'newTask'  && this.getNewTaskList()}
-                        {this.props.taskMode === 'done' && this.getDoneTaskList()}
-                    </ul>
+                <div className="deskItem">
+                    <button className="btn delete delete-desk" onClick={this.deleteDesk}><FontAwesomeIcon icon={faTimes}   /></button>
+                    <Link to={`/desk/${this.props.id}`}><h3>Desk {this.props.title} (ID: {this.props.id})</h3></Link>
+                    <Input
+                        onChange={this.onChangeTaskInput}
+                        value={this.state.task}
+                    />
+                    <hr/>
+                    <Button
+                        onClick={this.createTask(this.props.id)}
+                        disabled={!this.state.task}
+                        buttonText='Add task'
+                    />
+                    <Button
+                        onClick={this.deleteAllTask}
+                        buttonText='Delete All'
+                        disabled={!this.props.taskList || !this.props.taskList.length}
+                    />
+                    <div className="Desk-status">
+                        <Select
+                            options={this.props.options}
+                            label="Sort by"
+                            value={this.props.taskMode}
+                            onChange={this.onChangeTaskSelect}
+                        />
+                        <ul>
+                            <li>Всего: {this.props.taskList ? this.props.taskList.length : '0'}</li>
+                            <li>Активных:{this.getTaskListLength(false)}</li>
+                            <li>Выполненных:{this.getTaskListLength(true)}</li>
+                        </ul>
+                    </div>
+                    <div className="Desk-taskList">
+
+                        <h2>My tasks</h2>
+                        <ul>
+                            {this.props.taskMode === 'all'  && this.getAllTaskList(this.props.taskList)}
+                            {this.props.taskMode === 'newTask'  && this.getNewTaskList()}
+                            {this.props.taskMode === 'done' && this.getDoneTaskList()}
+                        </ul>
+                    </div>
                 </div>
-            </div>
+
         )
         }
     }
 
-export default Desk;
+export default withRouter(Desk);
