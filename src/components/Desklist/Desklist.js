@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
 import Input from "../UI/Input/Input";
 import Button from "../UI/Button/Button";
-import Desk from "../Desk/Desk";
+//import Desk from "../Desk/Desk";
 
 class Desklist extends Component {
-
 
     render() {
         return (

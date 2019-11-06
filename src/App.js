@@ -9,6 +9,8 @@ import Desk from './components/Desk/Desk';
 import Desklist from "./components/Desklist/Desklist";
 import DeskDetail from "./components/DeskDetail/DeskDetail";
 import Select from "./components/UI/Select/Select";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCheck,faTrashAlt} from "@fortawesome/free-solid-svg-icons";
 // import NavLink from "react-router-dom/modules/NavLink";
 
 const options = [
@@ -81,6 +83,7 @@ class App extends Component{
                     deleteAllTask = {this.deleteAllTask}
                     title={desk.desk}
                     id={desk.id}
+                    onChange={this.onChangeTaskInput}
                     onChangeTaskSelectInput={this.onChangeTaskSelectInput}
                     taskMode = {desk.taskMode}
                     options={options}
@@ -176,7 +179,15 @@ class App extends Component{
             }
         )
     };
+    onChangeTaskInput = (event) => {
+        console.log('onChangeTaskInput',this.state);
+        this.setState(
+            {
+                task: event.target.value
+            }
+        );
 
+    };
     onChangeTaskSelectInput = (id,event) => {
         this.setState(
             prevState => ({
@@ -193,27 +204,61 @@ class App extends Component{
         )
     };
 
+    getAllTaskList = (taskList) => {
+       // console.log('taskList', taskList);
+        return taskList && taskList.map((task,index) => (
+                <li key={index}>
+                    <span className={`task ${task.done && 'decoration'}`}>{index + 1}. {task.task}</span>
+                    {/*<button className="btn check"><FontAwesomeIcon icon={faCheck} onClick={this.checkTask(task.id) } /></button>*/}
+                    {/*<button className="btn delete"><FontAwesomeIcon icon={faTrashAlt} onClick={this.deleteTask(task.id) } /></button>*/}
+                </li>
+            )
+        )
+    };
+
+    getTaskListLength = (status) => {
+        const task = this.props.taskList ? this.props.taskList.filter(item => item.done === status) : [];
+        return task.length;
+    };
+    getDeskTitle = (deskID) => {
+        const deskList = this.state.deskList;
+        const deskTitle = deskList.find(desk => desk.id == deskID).desk;
+        return(deskTitle);
+    }
     render() {
-    //console.log('this.props',this.props.match.deskID);
+
 
         return (
             <div className="App">
             <BrowserRouter>
                     <Switch>
-
                         <Route exact path="/desk/:deskID"
-                              render={() => (<DeskDetail
+                              render={(props) => {
+                                  return (<DeskDetail
                                       options={options}
-                                      id={this.state.deskList.id}
-                                  />)} />
-                        <Route exact path="/" render={() => ( <Desklist
+                                      //id={this.state.deskList.id}
+                                      taskList={this.state.taskList[props.match.params.deskID]}
+                                      checkTask={this.checkTask}
+                                      deleteTask={this.deleteTask}
+                                      getTaskListLength = {this.getTaskListLength}
+                                      taskMode={'All'}
+                                      getAllTaskList={this.getAllTaskList}
+                                      onChangeTaskSelectInput={this.onChangeTaskSelectInput}
+                                      title={this.getDeskTitle(props.match.params.deskID)}
+                                      //task={this.task}
+                                      onChange={this.onChangeTaskInput}
+                                  />)}} />
+
+                        <Route exact path="/" render={() =>  {
+                            console.log('this.state',this.state);
+                            return (<Desklist
                             deskList={this.state.deskList}
                             getAllDeskList = {this.getAllDeskList}
                             onChangeDeskInput = {this.onChangeDeskInput}
                             createDesk = {this.createDesk}
                             desk={this.state.desk}
 
-                        />)} />
+                        />)}} />
 
                     </Switch>
             </BrowserRouter>

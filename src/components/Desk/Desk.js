@@ -68,6 +68,7 @@ class Desk extends Component{
     };
 
     onChangeTaskInput = (event) => {
+        console.log('onChangeTaskInput',this.state);
         this.setState(
             {
                 task: event.target.value
@@ -77,13 +78,14 @@ class Desk extends Component{
     };
 
 
-    createTask = (deskID) => () => {
+    createTask = (deskID, desk) => () => {
         const index = Math.round(Math.random() * 10000)
         const taskItem = {
             id: index,
             task: this.state.task,
             done:false,
-            deskID
+            deskID,
+            desk
         };
 
         this.props.createTask(deskID,taskItem);
@@ -127,7 +129,7 @@ class Desk extends Component{
                     />
                     <hr/>
                     <Button
-                        onClick={this.createTask(this.props.id)}
+                        onClick={this.createTask(this.props.id,this.props.title )}
                         disabled={!this.state.task}
                         buttonText='Add task'
                     />

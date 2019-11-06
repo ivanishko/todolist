@@ -1,16 +1,17 @@
 import React, {Component} from 'react';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faTimes} from "@fortawesome/free-solid-svg-icons";
-import {Router,Link,withRouter} from "react-router-dom";
+import {faCheck, faTrashAlt} from "@fortawesome/free-solid-svg-icons";
+import {withRouter, Link} from "react-router-dom";
+import './DeskDetail.css';
+
 import Input from "../UI/Input/Input";
 import Button from "../UI/Button/Button";
 import Select from "../UI/Select/Select";
-
+import Desk from "../Desk/Desk";
 
 
 
 class DeskDetail extends Component {
-
     createTask = (deskID) => () => {
         const index = Math.round(Math.random() * 10000)
         const taskItem = {
@@ -27,53 +28,74 @@ class DeskDetail extends Component {
         )
     };
 
+    getAllTaskList = (taskList) => {
+      //  console.log('taskList', taskList);
+        return this.props.getAllTaskList(taskList);
+    };
+
+
+    getDoneTaskList = () => {
+        const task = this.props.taskList.filter(item => item.done);
+        return this.getAllTaskList(task)
+    };
+
+    getNewTaskList = () => {
+        const task = this.props.taskList.filter(item => !item.done);
+        return this.getAllTaskList(task)
+    };
+
 
     render() {
-        console.log('this.props',this.props)
+      //  console.log('this.props',this.props);
+     //   console.log('this.state',this.props.state);
+       // console.log('title',this.props.title);
         return (
-            <div>
-                <h1>Desk , (ID:{this.props.match.params.deskID}</h1>
-                {/*<div className="deskItem">*/}
-                {/*    <button className="btn delete delete-desk" onClick={this.props.deleteDesk}><FontAwesomeIcon icon={faTimes}   /></button>*/}
-                {/*    <Link to={`/desk/${this.props.id}`}><h3>Desk {this.props.title} (ID: {this.props.id})</h3></Link>*/}
-                {/*    <Input*/}
-                {/*        onChange={this.props.onChangeTaskInput}*/}
-                {/*        value={this.props.task}*/}
-                {/*    />*/}
-                {/*    <hr/>*/}
-                {/*    <Button*/}
-                {/*        onClick={this.createTask(this.props.id)}*/}
-                {/*        disabled={!this.props.task}*/}
-                {/*        buttonText='Add task'*/}
-                {/*    />*/}
-                {/*    <Button*/}
-                {/*        onClick={this.props.deleteAllTask}*/}
-                {/*        buttonText='Delete All'*/}
-                {/*        disabled={!this.props.taskList || !this.props.taskList.length}*/}
-                {/*    />*/}
-                {/*    <div className="Desk-status">*/}
-                {/*        <Select*/}
-                {/*            options={this.props.options}*/}
-                {/*            label="Sort by"*/}
-                {/*            value={this.props.taskMode}*/}
-                {/*            onChange={this.onChangeTaskSelect}*/}
-                {/*        />*/}
-                {/*        <ul>*/}
-                {/*            <li>Всего: {this.props.taskList ? this.props.taskList.length : '0'}</li>*/}
-                {/*            <li>Активных:{this.props.getTaskListLength(false)}</li>*/}
-                {/*            <li>Выполненных:{this.props.getTaskListLength(true)}</li>*/}
-                {/*        </ul>*/}
-                {/*    </div>*/}
-                {/*    <div className="Desk-taskList">*/}
 
-                {/*        <h2>My tasks</h2>*/}
-                {/*        <ul>*/}
-                {/*            {this.props.taskMode === 'all'  && this.props.getAllTaskList(this.props.taskList)}*/}
-                {/*            {this.props.taskMode === 'newTask'  && this.props.getNewTaskList()}*/}
-                {/*            {this.props.taskMode === 'done' && this.props.getDoneTaskList()}*/}
-                {/*        </ul>*/}
-                {/*    </div>*/}
-                {/*</div>*/}
+            <div className='DeskDetail'>
+                <Link to="/">Home</Link>
+
+                <h1>Desk {this.props.title ? this.props.title : 'null' } (ID:{this.props.match.params.deskID})</h1>
+                <div className="deskItem">
+                    <button className="btn delete delete-desk" onClick={this.props.deleteDesk}>Delete this desk</button>
+                    <br/>
+                    <br/>
+                    <Input
+                        onChange={this.props.onChange}
+                        value={this.props.task}
+                    />
+                    <hr/>
+                    <Button
+                        onClick={this.createTask(this.props.id)}
+                        disabled={!this.props.task}
+                        buttonText='Add task'
+                    />
+                    <Button
+                        onClick={this.props.deleteAllTask}
+                        buttonText='Delete All'
+                        disabled={!this.props.taskList || !this.props.taskList.length}
+                    />
+                    <div className="DeskDetail-status">
+                        <Select
+                            options={this.props.options}
+                            label="Sort by"
+                            value={this.taskMode}
+                            onChange={this.props.onChangeTaskSelect}
+                        />
+                        <ul>
+                            <li>Всего: {this.props.taskList ? this.props.taskList.length : '0'}</li>
+                            <li>Активных:{this.props.getTaskListLength(false)}</li>
+                            <li>Выполненных:{this.props.getTaskListLength(true)}</li>
+                        </ul>
+                    </div>
+                    <div className="DeskDetail-taskList">
+                        <h2>My tasks</h2>
+                        <ul>
+                            {this.getAllTaskList(this.props.taskList)}
+                            {this.props.taskMode === 'newTask'  && this.getNewTaskList()}
+                            {this.props.taskMode === 'done' && this.getDoneTaskList()}
+                        </ul>
+                    </div>
+                </div>
             </div>
         );
     }
