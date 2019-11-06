@@ -28,3 +28,31 @@
     border: 0;
     display: inline-block;
 }
+.DeskDetail .task {
+    flex-grow: 1;
+    text-align: left;
+}
+
+.DeskDetail .decoration {
+    text-decoration: line-through;
+}
+.DeskDetail .btn {
+    padding: 5px;
+    margin: 5px;
+    border-radius: 3px;
+
+}
+
+.DeskDetail .btn.delete {
+    color: red;
+}
+
+.DeskDetail .btn.delete.delete-desk {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.DeskDetail .btn.check {
+    color: darkgreen;
+}

@@ -12,6 +12,8 @@ import Desk from "../Desk/Desk";
 
 
 class DeskDetail extends Component {
+
+
     createTask = (deskID) => () => {
         const index = Math.round(Math.random() * 10000)
         const taskItem = {
@@ -29,26 +31,36 @@ class DeskDetail extends Component {
     };
 
     getAllTaskList = (taskList) => {
-      //  console.log('taskList', taskList);
-        return this.props.getAllTaskList(taskList);
+        console.log('taskList', taskList);
+        return taskList && taskList.map((task,index) => (
+                <li key={index}>
+                    <span className={`task ${task.done && 'decoration'}`}>{index + 1}. {task.task}</span>
+                    <button className="btn check"><FontAwesomeIcon icon={faCheck} onClick={() => this.props.checkTask(task.deskID,task.id) } /></button>
+                    <button className="btn delete"><FontAwesomeIcon icon={faTrashAlt} onClick={() => this.props.deleteTask(task.deskID,task.id) } /></button>
+                </li>
+            )
+        )
+    };
+    getTaskListLength = (status) => {
+        const task = this.props.taskList ? this.props.taskList.filter(item => item.done === status) : [];
+        return task.length;
     };
 
-
     getDoneTaskList = () => {
-        const task = this.props.taskList.filter(item => item.done);
+        const task = this.taskList.filter(item => item.done);
+        console.log('tasktasktask',task)
         return this.getAllTaskList(task)
     };
 
     getNewTaskList = () => {
-        const task = this.props.taskList.filter(item => !item.done);
+        const task = this.taskList.filter(item => !item.done);
         return this.getAllTaskList(task)
     };
 
 
     render() {
-      //  console.log('this.props',this.props);
-     //   console.log('this.state',this.props.state);
-       // console.log('title',this.props.title);
+      //console.log('DeskDetail this.props',this.props);
+        console.log('[props.match.params.deskID]',this.props.match.params.deskID);
         return (
 
             <div className='DeskDetail'>
@@ -83,16 +95,16 @@ class DeskDetail extends Component {
                         />
                         <ul>
                             <li>Всего: {this.props.taskList ? this.props.taskList.length : '0'}</li>
-                            <li>Активных:{this.props.getTaskListLength(false)}</li>
-                            <li>Выполненных:{this.props.getTaskListLength(true)}</li>
+                            <li>Активных:{this.getTaskListLength(false)}</li>
+                            <li>Выполненных:{this.getTaskListLength(true)}</li>
                         </ul>
                     </div>
                     <div className="DeskDetail-taskList">
                         <h2>My tasks</h2>
                         <ul>
                             {this.getAllTaskList(this.props.taskList)}
-                            {this.props.taskMode === 'newTask'  && this.getNewTaskList()}
-                            {this.props.taskMode === 'done' && this.getDoneTaskList()}
+                            {/*{this.state.taskMode === 'newTask'  && this.getNewTaskList()}*/}
+                            {/*{this.state.taskMode === 'done' && this.getDoneTaskList()}*/}
                         </ul>
                     </div>
                 </div>

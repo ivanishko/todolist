@@ -72,6 +72,7 @@ class App extends Component{
     };
 
     getAllDeskList = (deskList) => {
+
         return deskList.map((desk,index) => (
             <li key={index}>
                 <Desk
@@ -87,6 +88,7 @@ class App extends Component{
                     onChangeTaskSelectInput={this.onChangeTaskSelectInput}
                     taskMode = {desk.taskMode}
                     options={options}
+                   // getAllTaskList = {this.getAllTaskList}
                 />
             </li>
         ));
@@ -141,6 +143,7 @@ class App extends Component{
 
 
     checkTask = (deskID,taskID) => {
+        console.log('deskID = ', deskID, 'taskID = ', taskID);
         this.setState(
             prevState => ({
                 taskList: {
@@ -205,12 +208,11 @@ class App extends Component{
     };
 
     getAllTaskList = (taskList) => {
-       // console.log('taskList', taskList);
         return taskList && taskList.map((task,index) => (
                 <li key={index}>
                     <span className={`task ${task.done && 'decoration'}`}>{index + 1}. {task.task}</span>
-                    {/*<button className="btn check"><FontAwesomeIcon icon={faCheck} onClick={this.checkTask(task.id) } /></button>*/}
-                    {/*<button className="btn delete"><FontAwesomeIcon icon={faTrashAlt} onClick={this.deleteTask(task.id) } /></button>*/}
+                    <button className="btn check"><FontAwesomeIcon icon={faCheck} onClick={this.checkTask(task.deskID,task.id) } /></button>
+                    <button className="btn delete"><FontAwesomeIcon icon={faTrashAlt} onClick={this.deleteTask(task.deskID,task.id) } /></button>
                 </li>
             )
         )
@@ -221,10 +223,10 @@ class App extends Component{
         return task.length;
     };
     getDeskTitle = (deskID) => {
-        const deskList = this.state.deskList;
-        const deskTitle = deskList.find(desk => desk.id == deskID).desk;
-        return(deskTitle);
-    }
+        const deskList = this.state.deskList ;
+        const deskTitle = deskList.find(desk => desk.id == deskID) || {};
+        return(deskTitle.desk);
+    };
     render() {
 
 
@@ -233,24 +235,30 @@ class App extends Component{
             <BrowserRouter>
                     <Switch>
                         <Route exact path="/desk/:deskID"
+
                               render={(props) => {
+                                  const deskID = props.match.params.deskID;
+                                  console.log('deskID',deskID);
+                                  console.log('this.state.taskList[props.match.params.deskID]',this.state.taskList[deskID]);
                                   return (<DeskDetail
                                       options={options}
-                                      //id={this.state.deskList.id}
-                                      taskList={this.state.taskList[props.match.params.deskID]}
+                                    // taskList={this.state.taskList[props.match.params.deskID]}
+                                      createTask = {this.createTask}
+                                     taskList={this.state.taskList[deskID]}
                                       checkTask={this.checkTask}
                                       deleteTask={this.deleteTask}
+                                      deleteAllTask={this.deleteAllTask}
                                       getTaskListLength = {this.getTaskListLength}
                                       taskMode={'All'}
                                       getAllTaskList={this.getAllTaskList}
                                       onChangeTaskSelectInput={this.onChangeTaskSelectInput}
                                       title={this.getDeskTitle(props.match.params.deskID)}
+                                      id = {props.match.params.deskID}
                                       //task={this.task}
                                       onChange={this.onChangeTaskInput}
                                   />)}} />
 
                         <Route exact path="/" render={() =>  {
-                            console.log('this.state',this.state);
                             return (<Desklist
                             deskList={this.state.deskList}
                             getAllDeskList = {this.getAllDeskList}

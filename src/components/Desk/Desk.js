@@ -24,6 +24,7 @@ class Desk extends Component{
     };
 
     checkTask = (taskID) => () => {
+        console.log('this.props.id', this.props.id);
         this.props.checkTask(this.props.id,taskID)
     };
 
@@ -33,6 +34,7 @@ class Desk extends Component{
 
     getAllTaskList = (taskList) => {
 
+        //return this.props.getAllTaskList(taskList);
         return taskList && taskList.map((task,index) => (
                 <li key={index}>
                     <span className={`task ${task.done && 'decoration'}`}>{index + 1}. {task.task}</span>
@@ -45,7 +47,7 @@ class Desk extends Component{
 
     getDoneTaskList = () => {
         const task = this.props.taskList.filter(item => item.done);
-        return this.getAllTaskList(task)
+        return this.getAllTaskList(task);
     };
 
     getNewTaskList = () => {
@@ -54,6 +56,7 @@ class Desk extends Component{
     };
 
     onChangeTaskSelect = (event) => {
+
         this.setState(
             {
                 taskMode:event.target.value
@@ -113,11 +116,15 @@ class Desk extends Component{
     };
 
     deleteDesk = () => {
-        this.props.deleteDesk(this.props.id)
+        const isDeleteConfirm = confirm("Delete desk?");
+
+        if (isDeleteConfirm) {
+            this.props.deleteDesk(this.props.id)
+        }
     };
 
     render() {
-       // console.log(props);
+
         return(
 
                 <div className="deskItem">
