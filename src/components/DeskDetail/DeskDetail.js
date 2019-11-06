@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, {Component} from 'react';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck, faTrashAlt} from "@fortawesome/free-solid-svg-icons";
@@ -30,8 +31,23 @@ class DeskDetail extends Component {
         )
     };
 
+    deleteAllTask = () => {
+        const isDeleteConfirm = confirm("Delete desk?");
+
+        if (isDeleteConfirm) {
+            this.props.deleteAllTask(this.props.id);
+        }
+    };
+
+    deleteDesk = () => {
+        //const isDeleteConfirm = confirm("Delete desk?");
+
+       //if (isDeleteConfirm) {
+            this.props.deleteDesk(this.props.id)
+       //}
+    };
+
     getAllTaskList = (taskList) => {
-        console.log('taskList', taskList);
         return taskList && taskList.map((task,index) => (
                 <li key={index}>
                     <span className={`task ${task.done && 'decoration'}`}>{index + 1}. {task.task}</span>
@@ -42,13 +58,14 @@ class DeskDetail extends Component {
         )
     };
     getTaskListLength = (status) => {
+        console.log('this.props.taskList ',this.props.taskList )
         const task = this.props.taskList ? this.props.taskList.filter(item => item.done === status) : [];
         return task.length;
     };
 
     getDoneTaskList = () => {
         const task = this.taskList.filter(item => item.done);
-        console.log('tasktasktask',task)
+
         return this.getAllTaskList(task)
     };
 
@@ -58,9 +75,11 @@ class DeskDetail extends Component {
     };
 
 
+
+
     render() {
-      //console.log('DeskDetail this.props',this.props);
-        console.log('[props.match.params.deskID]',this.props.match.params.deskID);
+        console.log('this.props.taskList 2',this.props.taskList )
+
         return (
 
             <div className='DeskDetail'>
@@ -68,7 +87,7 @@ class DeskDetail extends Component {
 
                 <h1>Desk {this.props.title ? this.props.title : 'null' } (ID:{this.props.match.params.deskID})</h1>
                 <div className="deskItem">
-                    <button className="btn delete delete-desk" onClick={this.props.deleteDesk}>Delete this desk</button>
+                    <button className="btn delete delete-desk" onClick={this.deleteDesk}>Delete this desk</button>
                     <br/>
                     <br/>
                     <Input
@@ -82,7 +101,7 @@ class DeskDetail extends Component {
                         buttonText='Add task'
                     />
                     <Button
-                        onClick={this.props.deleteAllTask}
+                        onClick={this.deleteAllTask}
                         buttonText='Delete All'
                         disabled={!this.props.taskList || !this.props.taskList.length}
                     />

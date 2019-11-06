@@ -129,6 +129,8 @@ class App extends Component{
     };
 
     deleteAllTask = (deskID) => {
+        console.log('deskID',deskID);
+        console.log('deletealltasks');
         this.setState(
             prevState => ({
                 taskList: {
@@ -165,7 +167,7 @@ class App extends Component{
 
     componentDidMount(){
         const deskList = JSON.parse(localStorage.getItem('deskList') ) || [];
-        const taskList = JSON.parse(localStorage.getItem('taskList') ) || [];
+        const taskList = JSON.parse(localStorage.getItem('taskList') ) || {};
         this.setState({
             deskList,
             taskList
@@ -173,6 +175,7 @@ class App extends Component{
     };
 
     deleteDesk = (id) => {
+        console.log('deleteDesk');
         this.setState(
             prevState => ({
                 deskList: prevState.deskList.filter(el => el.id !== id)
@@ -238,8 +241,7 @@ class App extends Component{
 
                               render={(props) => {
                                   const deskID = props.match.params.deskID;
-                                  console.log('deskID',deskID);
-                                  console.log('this.state.taskList[props.match.params.deskID]',this.state.taskList[deskID]);
+                                  console.log('this.state.taskList1', this.state.taskList);
                                   return (<DeskDetail
                                       options={options}
                                     // taskList={this.state.taskList[props.match.params.deskID]}
@@ -248,6 +250,7 @@ class App extends Component{
                                       checkTask={this.checkTask}
                                       deleteTask={this.deleteTask}
                                       deleteAllTask={this.deleteAllTask}
+                                      deleteDesk = {this.deleteDesk}
                                       getTaskListLength = {this.getTaskListLength}
                                       taskMode={'All'}
                                       getAllTaskList={this.getAllTaskList}
