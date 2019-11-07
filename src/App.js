@@ -129,8 +129,6 @@ class App extends Component{
     };
 
     deleteAllTask = (deskID) => {
-        console.log('deskID',deskID);
-        console.log('deletealltasks');
         this.setState(
             prevState => ({
                 taskList: {
@@ -145,7 +143,6 @@ class App extends Component{
 
 
     checkTask = (deskID,taskID) => {
-        console.log('deskID = ', deskID, 'taskID = ', taskID);
         this.setState(
             prevState => ({
                 taskList: {
@@ -175,7 +172,7 @@ class App extends Component{
     };
 
     deleteDesk = (id) => {
-        console.log('deleteDesk');
+        console.log('deleteDeskAPP');
         this.setState(
             prevState => ({
                 deskList: prevState.deskList.filter(el => el.id !== id)
@@ -192,8 +189,8 @@ class App extends Component{
                 task: event.target.value
             }
         );
-
     };
+
     onChangeTaskSelectInput = (id,event) => {
         this.setState(
             prevState => ({
@@ -241,12 +238,10 @@ class App extends Component{
 
                               render={(props) => {
                                   const deskID = props.match.params.deskID;
-                                  console.log('this.state.taskList1', this.state.taskList);
                                   return (<DeskDetail
                                       options={options}
-                                    // taskList={this.state.taskList[props.match.params.deskID]}
                                       createTask = {this.createTask}
-                                     taskList={this.state.taskList[deskID]}
+                                      taskList={this.state.taskList[deskID]}
                                       checkTask={this.checkTask}
                                       deleteTask={this.deleteTask}
                                       deleteAllTask={this.deleteAllTask}
@@ -257,8 +252,8 @@ class App extends Component{
                                       onChangeTaskSelectInput={this.onChangeTaskSelectInput}
                                       title={this.getDeskTitle(props.match.params.deskID)}
                                       id = {props.match.params.deskID}
-                                      //task={this.task}
-                                      onChange={this.onChangeTaskInput}
+                                      //onChange={this.onChangeTaskInput}
+                                      task = {this.state.task}
                                   />)}} />
 
                         <Route exact path="/" render={() =>  {
