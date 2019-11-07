@@ -34,7 +34,6 @@ class Desk extends Component{
 
     getAllTaskList = (taskList) => {
 
-        //return this.props.getAllTaskList(taskList);
         return taskList && taskList.map((task,index) => (
                 <li key={index}>
                     <span className={`task ${task.done && 'decoration'}`}>{index + 1}. {task.task}</span>
@@ -71,7 +70,6 @@ class Desk extends Component{
     };
 
     onChangeTaskInput = (event) => {
-        console.log('onChangeTaskInput',this.state);
         this.setState(
             {
                 task: event.target.value
@@ -90,12 +88,29 @@ class Desk extends Component{
             deskID,
             desk
         };
-
         this.props.createTask(deskID,taskItem);
         this.setState( {
             task:''
         }
         )
+    };
+
+    checkEnterKey = (event) => {
+        if (event.keyCode === 13) {
+            this.onChangeTaskInput(event);
+            const index = Math.round(Math.random() * 10000)
+            const taskItem = {
+                id: index,
+                task: this.state.task,
+                done: false,
+                deskID: this.props.id,
+                desk: this.props.title
+            };
+            this.props.createTask(this.props.id, taskItem);
+            this.setState( {
+                task:''
+            });
+        }
     };
 
     componentDidMount() {
@@ -133,10 +148,11 @@ class Desk extends Component{
                     <Input
                         onChange={this.onChangeTaskInput}
                         value={this.state.task}
+                        onKeyUp={this.checkEnterKey}
                     />
                     <hr/>
                     <Button
-                        onClick={this.createTask(this.props.id,this.props.title )}
+                        onClick={this.createTask(this.props.id,this.props.title)}
                         disabled={!this.state.task}
                         buttonText='Add task'
                     />

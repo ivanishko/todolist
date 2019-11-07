@@ -16,6 +16,7 @@ class Desklist extends Component {
                         <Input
                             onChange={this.props.onChangeDeskInput}
                             value={this.props.desk}
+                            onKeyUp={this.props.onKeyUp}
                         />
                         <Button
                             onClick={this.props.createDesk}

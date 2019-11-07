@@ -1,6 +1,7 @@
 import React from 'react'
 import './Input.css'
 
+
 const Input = props => {
 
     const cls = [
@@ -13,7 +14,7 @@ const Input = props => {
                 type="text"
                 value={props.value}
                 onChange={props.onChange}
-
+                onKeyUp={props.onKeyUp}
             />
         </div>
 

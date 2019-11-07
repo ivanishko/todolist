@@ -54,7 +54,6 @@ class App extends Component{
             id: index,
             desk: this.state.desk,
             taskMode: 'all'
-
         };
 
         this.setState(
@@ -172,7 +171,6 @@ class App extends Component{
     };
 
     deleteDesk = (id) => {
-        console.log('deleteDeskAPP');
         this.setState(
             prevState => ({
                 deskList: prevState.deskList.filter(el => el.id !== id)
@@ -189,6 +187,13 @@ class App extends Component{
                 task: event.target.value
             }
         );
+    };
+    
+    checkEnterKey = (event) => {
+        if (event.keyCode === 13) {
+            this.onChangeDeskInput(event);
+            this.createDesk();
+        }
     };
 
     onChangeTaskSelectInput = (id,event) => {
@@ -263,6 +268,7 @@ class App extends Component{
                             onChangeDeskInput = {this.onChangeDeskInput}
                             createDesk = {this.createDesk}
                             desk={this.state.desk}
+                            onKeyUp={this.checkEnterKey}
 
                         />)}} />
 

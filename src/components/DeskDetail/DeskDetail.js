@@ -16,7 +16,7 @@ class DeskDetail extends Component {
     state = {
         task: '',
         taskMode: 'all'
-    }
+    };
 
     createTask  = () => {
         const index = Math.round(Math.random() * 10000)
@@ -32,6 +32,12 @@ class DeskDetail extends Component {
                 task:''
             }
         )
+    };
+    checkEnterKey = (event) => {
+        if (event.keyCode === 13) {
+            this.onChangeTaskInput(event);
+            this.createTask();
+        }
     };
 
     deleteAllTask = () => {
@@ -59,7 +65,6 @@ class DeskDetail extends Component {
     };
 
     getTaskListLength = (status) => {
-
         const task = this.props.taskList ? this.props.taskList.filter(item => item.done === status) : [];
         return task.length;
     };
@@ -77,7 +82,6 @@ class DeskDetail extends Component {
 
     getDoneTaskList = () => {
         const task = this.props.taskList.filter(item => item.done);
-
         return this.getAllTaskList(task);
     };
 
@@ -90,7 +94,7 @@ class DeskDetail extends Component {
         this.setState({
             taskMode: event.target.value
         })
-    }
+    };
 
     componentDidMount() {
         console.log('componentDidMountDESKDETAIL')
@@ -110,6 +114,7 @@ class DeskDetail extends Component {
                     <Input
                         onChange={this.onChangeTaskInput}
                         value={this.state.task}
+                        onKeyUp = {this.checkEnterKey}
                     />
                     <hr/>
                     <Button
