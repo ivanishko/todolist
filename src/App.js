@@ -36,7 +36,7 @@ class App extends Component{
         desk: '',
         deskList: [],
         taskList: {
-        }
+        },
     };
 
     onChangeDeskInput = (event) => {
@@ -128,18 +128,13 @@ class App extends Component{
     };
 
     deleteAllTask = (deskID) => {
-        this.setState(
-            prevState => ({
-                taskList: {
-                    ...prevState.taskList,
-                    [deskID]:prevState.taskList[deskID] = []
-                }
+        const copyState = {...this.state};
+        delete copyState.taskList[deskID];
 
-            }),
+        this.setState( copyState,
             () => localStorage.setItem('taskList', JSON.stringify(this.state.taskList))
         )
     };
-
 
     checkTask = (deskID,taskID) => {
         this.setState(
@@ -171,6 +166,7 @@ class App extends Component{
     };
 
     deleteDesk = (id) => {
+        this.deleteAllTask(id);
         this.setState(
             prevState => ({
                 deskList: prevState.deskList.filter(el => el.id !== id)
@@ -178,7 +174,9 @@ class App extends Component{
             () => {
                 localStorage.setItem('deskList', JSON.stringify(this.state.deskList))
             }
-        )
+        );
+
+
     };
     onChangeTaskInput = (event) => {
         console.log('onChangeTaskInput',this.state);
@@ -187,8 +185,9 @@ class App extends Component{
                 task: event.target.value
             }
         );
+
     };
-    
+
     checkEnterKey = (event) => {
         if (event.keyCode === 13) {
             this.onChangeDeskInput(event);
@@ -256,8 +255,7 @@ class App extends Component{
                                       getAllTaskList={this.getAllTaskList}
                                       onChangeTaskSelectInput={this.onChangeTaskSelectInput}
                                       title={this.getDeskTitle(props.match.params.deskID)}
-                                      id = {props.match.params.deskID}
-                                      //onChange={this.onChangeTaskInput}
+                                      id = {parseInt(props.match.params.deskID)}
                                       task = {this.state.task}
                                   />)}} />
 

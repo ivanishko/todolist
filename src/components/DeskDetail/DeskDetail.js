@@ -53,7 +53,7 @@ class DeskDetail extends Component {
 
        if (isDeleteConfirm) {
             this.props.deleteDesk(this.props.id);
-       }
+       };
     };
 
     onChangeTaskInput = (event) => {
@@ -96,8 +96,10 @@ class DeskDetail extends Component {
         })
     };
 
-    componentDidMount() {
-        console.log('componentDidMountDESKDETAIL')
+    componentDidUpdate() {
+        console.log('componentDidUpdateDESKDETAIL');
+        this.props.history.push('/');
+
     }
 
     render() {

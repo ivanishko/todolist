@@ -139,9 +139,7 @@ class Desk extends Component{
     };
 
     render() {
-
         return(
-
                 <div className="deskItem">
                     <button className="btn delete delete-desk" onClick={this.deleteDesk}><FontAwesomeIcon icon={faTimes}   /></button>
                     <Link to={`/desk/${this.props.id}`}><h3>Desk {this.props.title} (ID: {this.props.id})</h3></Link>
