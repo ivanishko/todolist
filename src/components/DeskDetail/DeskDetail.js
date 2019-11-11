@@ -159,4 +159,4 @@ class DeskDetail extends Component {
     }
 }
 
-export default withRouter(DeskDetail);
+export default withRouter(withAuth(DeskDetail));
