@@ -3,7 +3,6 @@ import './Input.css'
 
 
 const Input = props => {
-
     const cls = [
         'Input'
     ];

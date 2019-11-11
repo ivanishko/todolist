@@ -3,15 +3,11 @@
 import React, {Component} from 'react';
 import './App.css';
 import {BrowserRouter , Route, Switch} from 'react-router-dom';
-import Input from './components/UI/Input/Input';
-import Button from './components/UI/Button/Button';
 import Desk from './components/Desk/Desk';
 import Desklist from "./components/Desklist/Desklist";
 import DeskDetail from "./components/DeskDetail/DeskDetail";
-import Select from "./components/UI/Select/Select";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck,faTrashAlt} from "@fortawesome/free-solid-svg-icons";
-// import NavLink from "react-router-dom/modules/NavLink";
 
 const options = [
     {
@@ -27,9 +23,6 @@ const options = [
         value: 'Новые'
     },
 ];
-
-
-
 
 class App extends Component{
     state = {
@@ -71,7 +64,6 @@ class App extends Component{
     };
 
     getAllDeskList = (deskList) => {
-
         return deskList.map((desk,index) => (
             <li key={index}>
                 <Desk
@@ -169,13 +161,12 @@ class App extends Component{
         this.deleteAllTask(id);
         this.setState(
             prevState => ({
-                deskList: prevState.deskList.filter(el => el.id !== id)
+                deskList: prevState.deskList.filter(el => el.id !== parseInt(id))
             }),
             () => {
                 localStorage.setItem('deskList', JSON.stringify(this.state.deskList))
             }
         );
-
 
     };
     onChangeTaskInput = (event) => {

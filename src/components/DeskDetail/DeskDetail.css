@@ -1,5 +1,9 @@
-.DeskDetail {
-
+.DeskDetail .container{
+    height: auto;
+    margin: 0 auto;
+    max-width: fit-content;
+    position: relative;
+    padding-bottom: 50px ;
 }
 
 .DeskDetail .deskItem {
@@ -50,9 +54,13 @@
 .DeskDetail .btn.delete.delete-desk {
     position: absolute;
     right: 0;
-    top: 0;
+    bottom: 0;
 }
 
 .DeskDetail .btn.check {
     color: darkgreen;
+}
+
+.DeskDetail input {
+    margin: 15px;
 }

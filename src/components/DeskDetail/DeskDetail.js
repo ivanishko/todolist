@@ -4,11 +4,10 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck, faTrashAlt} from "@fortawesome/free-solid-svg-icons";
 import {withRouter, Link} from "react-router-dom";
 import './DeskDetail.css';
-
 import Input from "../UI/Input/Input";
 import Button from "../UI/Button/Button";
 import Select from "../UI/Select/Select";
-import Desk from "../Desk/Desk";
+import withAuth from '../../hoc/WithAuth/WithAuth';
 
 
 
@@ -53,7 +52,8 @@ class DeskDetail extends Component {
 
        if (isDeleteConfirm) {
             this.props.deleteDesk(this.props.id);
-       };
+       }
+       // this.props.history.push('/');
     };
 
     onChangeTaskInput = (event) => {
@@ -96,61 +96,63 @@ class DeskDetail extends Component {
         })
     };
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps) {
         console.log('componentDidUpdateDESKDETAIL');
-        this.props.history.push('/');
-
+        if (this.props.title != prevProps.title && !this.props.title ) {
+            this.props.history.push('/');
+        }
     }
 
     render() {
         return (
 
             <div className='DeskDetail'>
+                <div className="container">
                 <Link to="/">Home</Link>
 
                 <h1>Desk {this.props.title ? this.props.title : 'null' } (ID:{this.props.match.params.deskID})</h1>
                 <div className="deskItem">
-                    <button className="btn delete delete-desk" onClick={this.deleteDesk}>Delete this desk</button>
-                    <br/>
 
-                    <Input
-                        onChange={this.onChangeTaskInput}
-                        value={this.state.task}
-                        onKeyUp = {this.checkEnterKey}
-                    />
-                    <hr/>
-                    <Button
-                        onClick={this.createTask}
-                        disabled={!this.state.task}
-                        buttonText='Add task'
-                    />
-                    <Button
-                        onClick={this.deleteAllTask}
-                        buttonText='Delete All'
-                        disabled={!this.props.taskList || !this.props.taskList.length}
-                    />
-                    <hr/>
-                    <div className="DeskDetail-status">
-                        <Select
-                            options={this.props.options}
-                            label="Sort by"
-                            value={this.taskMode}
-                            onChange={this.onChangeTaskSelect}
+                        <Input
+                            onChange={this.onChangeTaskInput}
+                            value={this.state.task}
+                            onKeyUp = {this.checkEnterKey}
                         />
-                        <ul>
-                            <li>Всего: {this.props.taskList ? this.props.taskList.length : '0'}</li>
-                            <li>Активных:{this.getTaskListLength(false)}</li>
-                            <li>Выполненных:{this.getTaskListLength(true)}</li>
-                        </ul>
+                        <hr/>
+                        <Button
+                            onClick={this.createTask}
+                            disabled={!this.state.task}
+                            buttonText='Add task'
+                        />
+                        <Button
+                            onClick={this.deleteAllTask}
+                            buttonText='Delete All'
+                            disabled={!this.props.taskList || !this.props.taskList.length}
+                        />
+                        <hr/>
+                        <div className="DeskDetail-status">
+                            <Select
+                                options={this.props.options}
+                                label="Sort by"
+                                value={this.taskMode}
+                                onChange={this.onChangeTaskSelect}
+                            />
+                            <ul>
+                                <li>Всего: {this.props.taskList ? this.props.taskList.length : '0'}</li>
+                                <li>Активных:{this.getTaskListLength(false)}</li>
+                                <li>Выполненных:{this.getTaskListLength(true)}</li>
+                            </ul>
+                        </div>
+                        <div className="DeskDetail-taskList">
+                            <h2>My tasks</h2>
+                            <ul>
+                                {this.state.taskMode === 'all'  &&this.getAllTaskList(this.props.taskList)}
+                                {this.state.taskMode === 'newTask'  && this.getNewTaskList()}
+                                {this.state.taskMode === 'done' && this.getDoneTaskList()}
+                            </ul>
+                        </div>
                     </div>
-                    <div className="DeskDetail-taskList">
-                        <h2>My tasks</h2>
-                        <ul>
-                            {this.state.taskMode === 'all'  &&this.getAllTaskList(this.props.taskList)}
-                            {this.state.taskMode === 'newTask'  && this.getNewTaskList()}
-                            {this.state.taskMode === 'done' && this.getDoneTaskList()}
-                        </ul>
-                    </div>
+                <button className="btn delete delete-desk" onClick={this.deleteDesk}>Delete this desk</button>
                 </div>
             </div>
         );
