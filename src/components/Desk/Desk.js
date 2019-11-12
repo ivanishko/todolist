@@ -120,6 +120,7 @@ class Desk extends Component{
             taskList,
             taskMode
         })
+
     };
 
     deleteAllTask = () => {

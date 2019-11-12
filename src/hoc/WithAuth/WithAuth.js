@@ -1,17 +1,16 @@
 import React, {Component} from 'react';
+import {Redirect} from "react-router";
 
 export default (Component) => {
     class Auth extends Component {
         render() {
-            const login = JSON.parse(localStorage.getItem('login'));
+            const login = localStorage.getItem('loginAuth') || '';
 
             if (login) {
                 return <Component {...this.props} />
             }
             return (
-                <div>
-                    not auth
-                </div>
+                <Redirect to="/login" />
             )
         }
     }

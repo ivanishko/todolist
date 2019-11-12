@@ -6,8 +6,10 @@ import {BrowserRouter , Route, Switch} from 'react-router-dom';
 import Desk from './components/Desk/Desk';
 import Desklist from "./components/Desklist/Desklist";
 import DeskDetail from "./components/DeskDetail/DeskDetail";
+import Login from "./components/Login/Login";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck,faTrashAlt} from "@fortawesome/free-solid-svg-icons";
+import {withRouter} from "react-router";
 
 const options = [
     {
@@ -30,6 +32,7 @@ class App extends Component{
         deskList: [],
         taskList: {
         },
+        login: ''
     };
 
     onChangeDeskInput = (event) => {
@@ -148,12 +151,33 @@ class App extends Component{
 
     };
 
+    componentDidUpdate(prevProps) {
+
+
+        //const login = localStorage.getItem('loginAuth') || '';
+
+        // console.log('this.props',this.props);
+        //
+        // console.log('propTypes');
+        //TODO  Если текущий РОут не равен предыдущему и предыдущий это страница авторизации то считать
+        // из локал стораджа и закинуть в стейт - логин
+        // if ( ) {
+        // const login = localStorage.getItem('loginAuth') || '';
+        // this.setState({
+        //     login
+        // })
+        // }
+
+        }
+
+
     componentDidMount(){
         const deskList = JSON.parse(localStorage.getItem('deskList') ) || [];
         const taskList = JSON.parse(localStorage.getItem('taskList') ) || {};
         this.setState({
             deskList,
-            taskList
+            taskList,
+
         })
     };
 
@@ -224,6 +248,7 @@ class App extends Component{
     };
     render() {
 
+        console.log('this.state.', this.state);
 
         return (
             <div className="App">
@@ -248,6 +273,7 @@ class App extends Component{
                                       title={this.getDeskTitle(props.match.params.deskID)}
                                       id = {parseInt(props.match.params.deskID)}
                                       task = {this.state.task}
+
                                   />)}} />
 
                         <Route exact path="/" render={() =>  {
@@ -258,8 +284,14 @@ class App extends Component{
                             createDesk = {this.createDesk}
                             desk={this.state.desk}
                             onKeyUp={this.checkEnterKey}
+                            login={this.state.login}
 
                         />)}} />
+                        <Route
+                            path="/login" render={() => {
+                                return (<Login />
+                                )}}
+                        />
 
                     </Switch>
             </BrowserRouter>
