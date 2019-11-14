@@ -2,14 +2,14 @@
 
 import React, {Component} from 'react';
 import './App.css';
-import {BrowserRouter , Route, Switch} from 'react-router-dom';
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import Desk from './components/Desk/Desk';
 import Desklist from "./components/Desklist/Desklist";
 import DeskDetail from "./components/DeskDetail/DeskDetail";
 import Login from "./components/Login/Login";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck,faTrashAlt} from "@fortawesome/free-solid-svg-icons";
-import {withRouter} from "react-router";
+import {Redirect} from "react-router";
 
 const options = [
     {
@@ -151,24 +151,6 @@ class App extends Component{
 
     };
 
-    componentDidUpdate(prevProps) {
-
-
-        //const login = localStorage.getItem('loginAuth') || '';
-
-        // console.log('this.props',this.props);
-        //
-        // console.log('propTypes');
-        //TODO  Если текущий РОут не равен предыдущему и предыдущий это страница авторизации то считать
-        // из локал стораджа и закинуть в стейт - логин
-        // if ( ) {
-        // const login = localStorage.getItem('loginAuth') || '';
-        // this.setState({
-        //     login
-        // })
-        // }
-
-        }
 
 
     componentDidMount(){
@@ -241,22 +223,33 @@ class App extends Component{
         const task = this.props.taskList ? this.props.taskList.filter(item => item.done === status) : [];
         return task.length;
     };
+
     getDeskTitle = (deskID) => {
         const deskList = this.state.deskList ;
         const deskTitle = deskList.find(desk => desk.id == deskID) || {};
         return(deskTitle.desk);
     };
+
+    logoutHandler = () => {
+        this.setState(
+            prevState => ({
+                login: ''
+            }),
+            () => {localStorage.setItem('login', '')}
+    );
+
+
+    };
+
     render() {
-
-        console.log('this.state.', this.state);
-
+        console.log('this.state', this.state);
         return (
             <div className="App">
             <BrowserRouter>
                     <Switch>
-                        <Route exact path="/desk/:deskID"
-
-                              render={(props) => {
+                        <Route exact
+                               path="/desk/:deskID"
+                               render={(props) => {
                                   const deskID = props.match.params.deskID;
                                   return (<DeskDetail
                                       options={options}
@@ -276,22 +269,27 @@ class App extends Component{
 
                                   />)}} />
 
-                        <Route exact path="/" render={() =>  {
-                            return (<Desklist
-                            deskList={this.state.deskList}
-                            getAllDeskList = {this.getAllDeskList}
-                            onChangeDeskInput = {this.onChangeDeskInput}
-                            createDesk = {this.createDesk}
-                            desk={this.state.desk}
-                            onKeyUp={this.checkEnterKey}
-                            login={this.state.login}
-
-                        />)}} />
                         <Route
-                            path="/login" render={() => {
+                            exact
+                            path="/"
+                            render={() =>  {
+                                    return (<Desklist
+                                    deskList={this.state.deskList}
+                                    getAllDeskList = {this.getAllDeskList}
+                                    onChangeDeskInput = {this.onChangeDeskInput}
+                                    createDesk = {this.createDesk}
+                                    desk={this.state.desk}
+                                    onKeyUp={this.checkEnterKey}
+                                    login={this.state.login}
+                                    logoutHandler={this.logoutHandler}
+                                />)}} />
+                        <Route
+                            path="/login"
+                            render={() => {
                                 return (<Login />
                                 )}}
                         />
+
 
                     </Switch>
             </BrowserRouter>

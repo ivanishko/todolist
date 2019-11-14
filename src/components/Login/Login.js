@@ -6,7 +6,6 @@ import {withRouter,Link} from "react-router-dom";
 class Login extends Component {
     state = {
         login: '',
-        loginAuth: ''
     };
 
     onChangeLoginInput = (event) => {
@@ -17,7 +16,7 @@ class Login extends Component {
     };
 
     loginHandler = () => {
-        localStorage.setItem('loginAuth', this.state.login);
+        localStorage.setItem('login', this.state.login);
 
         this.setState(
             {
@@ -35,7 +34,7 @@ class Login extends Component {
     };
 
     componentDidUpdate(prevProps) {
-        console.log('componentDidUpdateLOGIN',prevProps);
+       // console.log('componentDidUpdateLOGIN',prevProps);
         // if (this.props.title != prevProps.title && !this.props.title ) {
         //this.history.push('/');
     };
@@ -46,7 +45,7 @@ class Login extends Component {
         return (
             <div className="Login">
                 <Link to="/">Home</Link>
-
+                <h3>Please, sign in</h3>
                 <Input
                     onChange={this.onChangeLoginInput}
                     value={this.state.login}
