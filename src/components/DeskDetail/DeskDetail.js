@@ -97,8 +97,7 @@ class DeskDetail extends Component {
     };
 
     componentDidUpdate(prevProps) {
-        console.log('componentDidUpdateDESKDETAIL');
-        if (this.props.title != prevProps.title && !this.props.title ) {
+        if (this.props.title !== prevProps.title && !this.props.title ) {
             this.props.history.push('/');
         }
     }
@@ -114,6 +113,7 @@ class DeskDetail extends Component {
                 <div className="deskItem">
 
                         <Input
+                            type="text"
                             onChange={this.onChangeTaskInput}
                             value={this.state.task}
                             onKeyUp = {this.checkEnterKey}

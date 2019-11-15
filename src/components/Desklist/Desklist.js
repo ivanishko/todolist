@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Input from "../UI/Input/Input";
 import Button from "../UI/Button/Button";
 import withAuth from "../../hoc/WithAuth/WithAuth";
-import {withRouter, Redirect} from "react-router";
+import {withRouter} from "react-router";
 
 class Desklist extends Component {
 
@@ -14,27 +14,25 @@ class Desklist extends Component {
 
          this.setState(
              prevState => ({
-                 login: ''
+                 login: '',
+                 password: ''
              }),
-             () => {localStorage.setItem('login', '')}
+             () => {
+                 localStorage.setItem('login', '');
+             }
          );
-         //this.props.logoutHandler();
-         console.log('logoutHandler this.props', this.props);
 
     };
 
+
      componentDidUpdate(prevProps, prevState) {
-         console.log('componentDidUpdateDESKList');
-         console.log('this.state.',this.state,'prevState',prevState);
          if (this.state.login  !== prevState.login && !this.state.login ) {
-             console.log('yes i have');
              this.props.history.push('/');
          }
      }
 
     render()
     {
-        console.log('this.props.', this.props);
         return (
             <div>
                 <div>
@@ -46,6 +44,7 @@ class Desklist extends Component {
 
                         <br/>
                         <Input
+                            type="text"
                             onChange={this.props.onChangeDeskInput}
                             value={this.props.desk}
                             onKeyUp={this.props.onKeyUp}

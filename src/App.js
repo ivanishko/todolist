@@ -9,7 +9,6 @@ import DeskDetail from "./components/DeskDetail/DeskDetail";
 import Login from "./components/Login/Login";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck,faTrashAlt} from "@fortawesome/free-solid-svg-icons";
-import {Redirect} from "react-router";
 
 const options = [
     {
@@ -233,16 +232,19 @@ class App extends Component{
     logoutHandler = () => {
         this.setState(
             prevState => ({
-                login: ''
+                login: '',
+                password: ''
             }),
-            () => {localStorage.setItem('login', '')}
+            () => {
+                localStorage.setItem('login', '');
+                localStorage.setItem('password', '');
+            }
     );
 
 
     };
 
     render() {
-        console.log('this.state', this.state);
         return (
             <div className="App">
             <BrowserRouter>

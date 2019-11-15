@@ -9,7 +9,6 @@ import Input from '../UI/Input/Input';
 import Button from '../UI/Button/Button'
 import Select from '../UI/Select/Select';
 import {Link} from "react-router-dom";
-import { BrowserRouter as Router } from 'react-router-dom'
 import {withRouter} from 'react-router-dom'
 
 
@@ -145,6 +144,7 @@ class Desk extends Component{
                     <button className="btn delete delete-desk" onClick={this.deleteDesk}><FontAwesomeIcon icon={faTimes}   /></button>
                     <Link to={`/desk/${this.props.id}`}><h3>Desk {this.props.title} (ID: {this.props.id})</h3></Link>
                     <Input
+                        type="text"
                         onChange={this.onChangeTaskInput}
                         value={this.state.task}
                         onKeyUp={this.checkEnterKey}

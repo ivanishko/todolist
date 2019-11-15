@@ -3,10 +3,32 @@ import './Login.css'
 import Input from '../UI/Input/Input'
 import {withRouter,Link} from "react-router-dom";
 
+
+
+const users = [
+    {
+        login: 'qwe',
+        password: '123'
+    },
+    {
+        login: 'asd',
+        password: '123'
+    },
+    {
+        login: 'zxc',
+        password: '123'
+    },
+];
+
+
+
 class Login extends Component {
     state = {
         login: '',
+        password: ''
     };
+
+
 
     onChangeLoginInput = (event) => {
         this.setState({
@@ -15,8 +37,20 @@ class Login extends Component {
         )
     };
 
+    onChangePassInput = (event) => {
+        this.setState({
+                password: event.target.value
+            }
+        )
+    };
+
+
     loginHandler = () => {
-        localStorage.setItem('login', this.state.login);
+       const userAuth = users.find(user => user.login === this.state.login);
+
+       if  (userAuth && (userAuth.password === this.state.password)) {
+            localStorage.setItem('login', this.state.login);
+        }
 
         this.setState(
             {
@@ -47,10 +81,20 @@ class Login extends Component {
                 <Link to="/">Home</Link>
                 <h3>Please, sign in</h3>
                 <Input
+                    label="Login"
+                    type="text"
                     onChange={this.onChangeLoginInput}
                     value={this.state.login}
                     onKeyUp={this.checkEnterKey}
                 />
+                <Input
+                    label="Password"
+                    type="password"
+                    onChange={this.onChangePassInput}
+                    value={this.state.password}
+
+                />
+
 
                 <button onClick={this.loginHandler}>Login!</button>
 
