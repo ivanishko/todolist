@@ -2,12 +2,13 @@
 
 import React, {Component} from 'react';
 import './App.css';
-import {BrowserRouter , Route, Switch} from 'react-router-dom';
+import {BrowserRouter , Route, Switch, Link} from 'react-router-dom';
 import Desk from './components/Desk/Desk';
 import Desklist from "./components/Desklist/Desklist";
 import DeskDetail from "./components/DeskDetail/DeskDetail";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck,faTrashAlt} from "@fortawesome/free-solid-svg-icons";
+import AddTask from "./components/AddTask/AddTask"
 
 const options = [
     {
@@ -82,7 +83,9 @@ class App extends Component{
                    // getAllTaskList = {this.getAllTaskList}
                 />
             </li>
+            
         ));
+        
     };
 
     createTask = (deskID,taskItem) => {
@@ -100,6 +103,11 @@ class App extends Component{
             },
             () => {
                 localStorage.setItem('taskList', JSON.stringify(this.state.taskList))
+                this.setState( {
+                     task: '',
+                    desk: ''
+                }
+                )
             }
         )
     };
@@ -157,6 +165,10 @@ class App extends Component{
         })
     };
 
+    componentDidUpdate() {
+        console.log(this.state);
+    }
+
     deleteDesk = (id) => {
         this.deleteAllTask(id);
         this.setState(
@@ -170,7 +182,6 @@ class App extends Component{
 
     };
     onChangeTaskInput = (event) => {
-        console.log('onChangeTaskInput',this.state);
         this.setState(
             {
                 task: event.target.value
@@ -260,6 +271,23 @@ class App extends Component{
                             onKeyUp={this.checkEnterKey}
 
                         />)}} />
+
+                        <Route 
+                        path="/addtask"
+                                render={() => {
+                                    return (
+                                    <AddTask 
+                                    createTask={this.createTask}
+                                    disabled={!this.state.task || !this.state.desk}
+                                    onChange={this.onChangeTaskInput}
+                                    onChangeDeskInput={this.onChangeDeskInput}
+                                        options={this.state.deskList}
+                                        task={this.state.task}
+                                        desk={this.state.desk}
+                                        
+                                    />
+                                )}}
+                        />
 
                     </Switch>
             </BrowserRouter>

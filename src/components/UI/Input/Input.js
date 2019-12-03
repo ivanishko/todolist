@@ -11,7 +11,7 @@ const Input = props => {
         <div className={cls.join(' ')}>
             <input
                 type="text"
-                value={props.value  != ' ' ? props.value : ''}
+                value={props.value  !== ' ' ? props.value : ''}
                 onChange={props.onChange}
                 onKeyUp={props.onKeyUp}
             />

@@ -7,7 +7,6 @@ import './DeskDetail.css';
 import Input from "../UI/Input/Input";
 import Button from "../UI/Button/Button";
 import Select from "../UI/Select/Select";
-import withAuth from '../../hoc/WithAuth/WithAuth';
 
 
 

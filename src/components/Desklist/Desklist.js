@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Input from "../UI/Input/Input";
 import Button from "../UI/Button/Button";
+import {Link}  from "react-router-dom";
 
 class Desklist extends Component {
 
@@ -21,12 +22,19 @@ class Desklist extends Component {
                             buttonText='Add Desk'
                             disabled={!this.props.desk}
                         />
+                        <br/>
+                        {
+                           this.props.deskList.length   > 0 && <Link to="/addtask">Add Task</Link>
+                        }
+                         
                     </header>
 
                 <section className="Desk">
                     <ul>
                         {this.props.getAllDeskList(this.props.deskList)}
                     </ul>
+                    <br/>
+                   
                 </section>
             </div>
         );
