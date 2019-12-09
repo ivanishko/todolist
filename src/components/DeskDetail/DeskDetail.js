@@ -40,7 +40,6 @@ class DeskDetail extends Component {
 
     deleteAllTask = () => {
         const isDeleteConfirm = confirm("Delete desk?");
-
         if (isDeleteConfirm) {
             this.props.deleteAllTask(this.props.id);
         }
@@ -48,11 +47,9 @@ class DeskDetail extends Component {
 
     deleteDesk = () => {
         const isDeleteConfirm = confirm("Delete desk?");
-
-       if (isDeleteConfirm) {
+        if (isDeleteConfirm) {
             this.props.deleteDesk(this.props.id);
        }
-       // this.props.history.push('/');
     };
 
     onChangeTaskInput = (event) => {
@@ -96,7 +93,6 @@ class DeskDetail extends Component {
     };
 
     componentDidUpdate(prevProps) {
-        console.log('componentDidUpdateDESKDETAIL');
         if (this.props.title != prevProps.title && !this.props.title ) {
             this.props.history.push('/');
         }
@@ -108,7 +104,6 @@ class DeskDetail extends Component {
             <div className='DeskDetail'>
                 <div className="container">
                 <Link to="/">Home</Link>
-
                 <h1>Desk {this.props.title ? this.props.title : 'null' } (ID:{this.props.match.params.deskID})</h1>
                 <div className="deskItem">
 

@@ -165,10 +165,6 @@ class App extends Component{
         })
     };
 
-    componentDidUpdate() {
-        console.log(this.state);
-    }
-
     deleteDesk = (id) => {
         this.deleteAllTask(id);
         this.setState(
