@@ -5,9 +5,6 @@ import Input from './../UI/Input/Input';
 import Button from './../UI/Button/Button';
 import SelectDesk from './../UI/SelectDesk/SelectDesk';
 
-
-
-
 class AddTask extends Component {
 
     createTask  = () => {
@@ -22,9 +19,6 @@ class AddTask extends Component {
         this.props.createTask(this.props.desk,taskItem);
         
     };
-
-
-
 
     render() {
     return (

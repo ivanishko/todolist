@@ -8,8 +8,6 @@ import Input from "../UI/Input/Input";
 import Button from "../UI/Button/Button";
 import Select from "../UI/Select/Select";
 
-
-
 class DeskDetail extends Component {
     state = {
         task: '',
@@ -100,7 +98,6 @@ class DeskDetail extends Component {
 
     render() {
         return (
-
             <div className='DeskDetail'>
                 <div className="container">
                 <Link to="/">Home</Link>

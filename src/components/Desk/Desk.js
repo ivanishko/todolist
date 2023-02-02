@@ -12,8 +12,6 @@ import {Link} from "react-router-dom";
 import { BrowserRouter as Router } from 'react-router-dom'
 import {withRouter} from 'react-router-dom'
 
-
-
 class Desk extends Component{
     state = {
         task: '',
@@ -55,14 +53,12 @@ class Desk extends Component{
     };
 
     onChangeTaskSelect = (event) => {
-
         this.setState(
             {
                 taskMode:event.target.value
             },
         this.props.onChangeTaskSelectInput(this.props.id,event.target.value)
         )};
-
 
     getTaskListLength = (status) => {
             const task = this.props.taskList ? this.props.taskList.filter(item => item.done === status) : [];
@@ -75,9 +71,7 @@ class Desk extends Component{
                 task: event.target.value
             }
         );
-
     };
-
 
     createTask = (deskID, desk) => () => {
         const index = Math.round(Math.random() * 10000)
@@ -91,8 +85,7 @@ class Desk extends Component{
         this.props.createTask(deskID,taskItem);
         this.setState( {
             task:''
-        }
-        )
+        })
     };
 
     checkEnterKey = (event) => {
@@ -183,8 +176,7 @@ class Desk extends Component{
                     </div>
                 </div>
 
-        )
-        }
+        )}
     }
 
 export default withRouter(Desk);

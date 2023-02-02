@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 
-
 class SelectDesk extends Component { 
     render() {
         return (
@@ -26,6 +25,5 @@ class SelectDesk extends Component {
         )
     }
 }
-
 
 export default SelectDesk;

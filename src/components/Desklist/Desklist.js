@@ -10,7 +10,6 @@ class Desklist extends Component {
             <div>
                 <header className="App-header">
                     <h1>Home Page</h1>
-
                         <br/>
                         <Input
                             onChange={this.props.onChangeDeskInput}
@@ -26,15 +25,12 @@ class Desklist extends Component {
                         {
                            this.props.deskList.length   > 0 && <Link to="/addtask">Add Task</Link>
                         }
-                         
                     </header>
-
                 <section className="Desk">
                     <ul>
                         {this.props.getAllDeskList(this.props.deskList)}
                     </ul>
                     <br/>
-                   
                 </section>
             </div>
         );
